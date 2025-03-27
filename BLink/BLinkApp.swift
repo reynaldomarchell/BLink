@@ -10,25 +10,12 @@ import SwiftData
 
 @main
 struct BLinkApp: App {
-    @State private var modelContainer: ModelContainer
-    
-    init() {
-        do {
-            let schema = Schema([Bus.self, BusStop.self, Route.self, UserJourney.self])
-            let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-            modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not initialize ModelContainer: \(error)")
-        }
-    }
-    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .onAppear {
-                    BusDataManager.shared.populateSampleData(modelContext: modelContainer.mainContext)
-                }
+            SplashView()
         }
-        .modelContainer(modelContainer)
+        .modelContainer(for: [BusRoute.self, SavedLocation.self, BusInfo.self])
     }
 }
+
+
