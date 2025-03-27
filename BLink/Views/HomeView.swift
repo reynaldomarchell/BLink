@@ -30,30 +30,35 @@ struct HomeView: View {
             // Overlay UI
             VStack {
                 // Header
-                HStack {
-                    Text("Blink")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        showTutorial = true
-                    }) {
-                        Image(systemName: "questionmark.circle")
+                ZStack{
+                    Rectangle()
+                        .foregroundStyle(.clear)
+                        .frame(width: 402, height: 60)
+                        .background(.white)
+                    HStack {
+                        Text("Blink")
                             .font(.title)
-                            .foregroundColor(.primary)
+                            .fontWeight(.bold)
                             .padding()
-                            .background(Circle().fill(Color.white))
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            showTutorial = true
+                        }) {
+                            Image(systemName: "questionmark.circle")
+                                .font(.title2)
+                                .foregroundColor(.primary)
+                                .padding()
+                                .background(Circle().fill(Color.white))
+                        }
+                        .padding()
                     }
-                    .padding()
                 }
-                
                 Spacer()
                 
                 // Scanning frame with instructions
-                VStack(spacing: 20) {
+                VStack(spacing: 40) {
                     Text("Place the bus plate number\ninside the box")
                         .font(.headline)
                         .multilineTextAlignment(.center)
@@ -62,14 +67,17 @@ struct HomeView: View {
                         .background(Color.gray.opacity(0.7))
                         .cornerRadius(10)
                     
+                    
                     // Scanning frame - this will be positioned over the camera view
-                    ZStack {
+                    ZStack{
+
                         Rectangle()
                             .stroke(style: StrokeStyle(lineWidth: 3, dash: [10, 5]))
-                            .frame(width: 250, height: 150)
+                            .frame(width: 250, height: 200)
                             .foregroundColor(.white)
                     }
                     .frame(width: 250, height: 150)
+                    
                     
                     // Capture button
                     Button(action: {
@@ -91,7 +99,7 @@ struct HomeView: View {
                     // Divider with "or" text
                     HStack {
                         Rectangle()
-                            .frame(height: 1)
+                            .frame(height: 4)
                             .foregroundColor(.white)
                             .frame(width: 100)
                         
@@ -100,21 +108,21 @@ struct HomeView: View {
                             .padding(.horizontal, 10)
                         
                         Rectangle()
-                            .frame(height: 1)
+                            .frame(height: 4)
                             .foregroundColor(.white)
                             .frame(width: 100)
                     }
                     .padding(.vertical)
                     
                     // Manual input option
-                    Button(action: {
-                        isShowingManualInput = true
-                    }) {
-                        Text("Input the bus plate here.")
-                            .foregroundColor(.yellow)
-                            .underline()
-                    }
-                    .padding(.bottom, 10)
+//                    Button(action: {
+//                        isShowingManualInput = true
+//                    }) {
+//                        Text("Input the bus plate here.")
+//                            .foregroundColor(.yellow)
+//                            .underline()
+//                    }
+//                    .padding(.bottom, 10)
                     
                     // Search route option
                     Button(action: {
@@ -126,10 +134,11 @@ struct HomeView: View {
                             
                             Text("here")
                                 .foregroundColor(.yellow)
+                                .fontWeight(.bold)
                                 .underline()
                         }
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 50)
                 }
             }
         }
