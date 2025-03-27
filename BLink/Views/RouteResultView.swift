@@ -14,10 +14,15 @@ struct RouteResultView: View {
         center: CLLocationCoordinate2D(latitude: -6.301, longitude: 106.652),
         span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
     )
+    @State private var showAlert = false
     
     // Origin and destination locations
     private let originLocation = "Rumah Mantan | Jl. GOP Indah No 1"
     private let destinationLocation = "Gedung Apel | Jl. GOP Indah No 9"
+    
+    // Bus stop coordinates (simulated)
+    private let busStopCoordinates = CLLocationCoordinate2D(latitude: -6.301, longitude: 106.652)
+    private let busStopName = "Halte Sektor 1.3"
     
     var body: some View {
         VStack(spacing: 0) {
@@ -92,14 +97,16 @@ struct RouteResultView: View {
                 
                 // Map view
                 ZStack(alignment: .bottom) {
-                    Map(coordinateRegion: $region)
-                        .frame(height: 300)
-                        .cornerRadius(12)
-                        .padding(.horizontal)
+                    Map(coordinateRegion: $region, annotationItems: [BusStopLocation(coordinate: busStopCoordinates)]) { location in
+                        MapMarker(coordinate: location.coordinate, tint: .red)
+                    }
+                    .frame(height: 300)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
                     
                     VStack {
                         Button(action: {
-                            // Navigate to bus stop
+                            openMapsDirections()
                         }) {
                             Text("Go to Bus Stop")
                                 .font(.headline)
@@ -124,7 +131,34 @@ struct RouteResultView: View {
             }
             .foregroundColor(.blue)
         })
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Could Not Open Maps"),
+                message: Text("There was a problem opening Maps to get directions to the bus stop."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
     }
+    
+    private func openMapsDirections() {
+        let placemark = MKPlacemark(coordinate: busStopCoordinates)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = busStopName
+        
+        let launchOptions = [
+            MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking
+        ]
+        
+        if !mapItem.openInMaps(launchOptions: launchOptions) {
+            showAlert = true
+        }
+    }
+}
+
+// Model for map annotation
+struct BusStopLocation: Identifiable {
+    let id = UUID()
+    let coordinate: CLLocationCoordinate2D
 }
 
 #Preview {

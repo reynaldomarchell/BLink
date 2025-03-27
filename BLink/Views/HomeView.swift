@@ -15,11 +15,16 @@ struct HomeView: View {
     @State private var showScanResult = false
     @State private var isShowingManualInput = false
     @State private var isCameraAuthorized = false
+    @State private var showTutorial = false
+    @State private var capturedImage: CVPixelBuffer?
     
     var body: some View {
         ZStack {
             // Camera view
-            CameraView(recognizedPlate: $recognizedPlate, showScanResult: $showScanResult)
+            CameraView(recognizedPlate: $recognizedPlate,
+                       showScanResult: $showScanResult,
+                       capturedImage: $capturedImage,
+                       manualCapture: true)
                 .edgesIgnoringSafeArea(.all)
             
             // Overlay UI
@@ -34,7 +39,7 @@ struct HomeView: View {
                     Spacer()
                     
                     Button(action: {
-                        // Show help or info
+                        showTutorial = true
                     }) {
                         Image(systemName: "questionmark.circle")
                             .font(.title)
@@ -68,7 +73,9 @@ struct HomeView: View {
                     
                     // Capture button
                     Button(action: {
-                        // This would trigger manual capture in a real implementation
+                        if let pixelBuffer = capturedImage {
+                            analyzeImage(pixelBuffer)
+                        }
                     }) {
                         Circle()
                             .fill(Color.white)
@@ -144,6 +151,9 @@ struct HomeView: View {
                 showScanResult = true
             })
         }
+        .fullScreenCover(isPresented: $showTutorial) {
+            TutorialContent(isPresented: $showTutorial)
+        }
         .alert(isPresented: .constant(!isCameraAuthorized)) {
             Alert(
                 title: Text("Camera Access Required"),
@@ -172,12 +182,66 @@ struct HomeView: View {
             isCameraAuthorized = false
         }
     }
+    
+    private func analyzeImage(_ pixelBuffer: CVPixelBuffer) {
+        // Create a request to recognize text
+        let request = VNRecognizeTextRequest { request, error in
+            guard error == nil else { return }
+            
+            if let results = request.results as? [VNRecognizedTextObservation] {
+                // Process text observations
+                let recognizedStrings = results.compactMap { observation in
+                    observation.topCandidates(1).first?.string
+                }
+                
+                // Look for patterns that might be bus plate numbers
+                for string in recognizedStrings {
+                    // Pattern matching for bus plates
+                    // Looking for patterns like "S11 BSD", "B 1234 XYZ", etc.
+                    let busPlatePattern1 = "\\b[A-Z]\\d{1,4}\\s?[A-Z]{2,3}\\b" // S11 BSD
+                    let busPlatePattern2 = "\\b[A-Z]\\s?\\d{1,4}\\s?[A-Z]{2,3}\\b" // B 1234 XYZ
+                    
+                    let regex1 = try? NSRegularExpression(pattern: busPlatePattern1)
+                    let regex2 = try? NSRegularExpression(pattern: busPlatePattern2)
+                    
+                    let range = NSRange(location: 0, length: string.utf16.count)
+                    
+                    if (regex1?.firstMatch(in: string, range: range) != nil) ||
+                       (regex2?.firstMatch(in: string, range: range) != nil) ||
+                       string.contains("BSD") || string.contains("S11") {
+                        
+                        DispatchQueue.main.async {
+                            self.recognizedPlate = string
+                            self.showScanResult = true
+                        }
+                        break
+                    }
+                }
+            }
+        }
+        
+        // Configure the request for optimal text recognition
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = false
+        request.customWords = ["BSD", "S11", "AEON", "ICE", "LOOP", "LINE"]
+        
+        // Create a handler to perform the request
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+        
+        do {
+            try handler.perform([request])
+        } catch {
+            print("Failed to perform text recognition: \(error)")
+        }
+    }
 }
 
 // Camera view using UIViewRepresentable
 struct CameraView: UIViewRepresentable {
     @Binding var recognizedPlate: String?
     @Binding var showScanResult: Bool
+    @Binding var capturedImage: CVPixelBuffer?
+    var manualCapture: Bool
     
     // Create the UIView
     func makeUIView(context: Context) -> UIView {
@@ -206,8 +270,6 @@ struct CameraView: UIViewRepresentable {
         var parent: CameraView
         var captureSession: AVCaptureSession?
         var previewLayer: AVCaptureVideoPreviewLayer?
-        private var lastProcessingTime = Date()
-        private let processingInterval: TimeInterval = 0.5 // Process frames every half second
         
         init(_ parent: CameraView) {
             self.parent = parent
@@ -274,81 +336,20 @@ struct CameraView: UIViewRepresentable {
         
         // Process video frames
         func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-            // Throttle processing to avoid excessive CPU usage
-            let currentTime = Date()
-            guard currentTime.timeIntervalSince(lastProcessingTime) >= processingInterval else {
+            guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+            
+            // Store the current frame for manual capture
+            DispatchQueue.main.async {
+                self.parent.capturedImage = pixelBuffer
+            }
+            
+            // If manual capture is enabled, don't do automatic recognition
+            if parent.manualCapture {
                 return
             }
             
-            lastProcessingTime = currentTime
-            
-            guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-                return
-            }
-            
-            // Process the image with Vision framework
-            recognizePlateNumber(in: pixelBuffer)
-        }
-        
-        // Text recognition using Vision framework
-        private func recognizePlateNumber(in pixelBuffer: CVPixelBuffer) {
-            // Create a request to recognize text
-            let request = VNRecognizeTextRequest { [weak self] request, error in
-                guard let self = self, error == nil else { return }
-                
-                if let results = request.results as? [VNRecognizedTextObservation] {
-                    // Process text observations
-                    let recognizedStrings = results.compactMap { observation in
-                        observation.topCandidates(1).first?.string
-                    }
-                    
-                    // Look for patterns that might be bus plate numbers
-                    for string in recognizedStrings {
-                        // Pattern matching for bus plates
-                        // Looking for patterns like "S11 BSD", "B 1234 XYZ", etc.
-                        let busPlatePattern1 = "\\b[A-Z]\\d{1,4}\\s?[A-Z]{2,3}\\b" // S11 BSD
-                        let busPlatePattern2 = "\\b[A-Z]\\s?\\d{1,4}\\s?[A-Z]{2,3}\\b" // B 1234 XYZ
-                        
-                        let regex1 = try? NSRegularExpression(pattern: busPlatePattern1)
-                        let regex2 = try? NSRegularExpression(pattern: busPlatePattern2)
-                        
-                        let range = NSRange(location: 0, length: string.utf16.count)
-                        
-                        if (regex1?.firstMatch(in: string, range: range) != nil) ||
-                           (regex2?.firstMatch(in: string, range: range) != nil) ||
-                           string.contains("BSD") || string.contains("S11") {
-                            
-                            DispatchQueue.main.async {
-                                self.parent.recognizedPlate = string
-                                self.parent.showScanResult = true
-                                
-                                // Pause camera capture when a plate is recognized
-                                self.captureSession?.stopRunning()
-                                
-                                // Resume camera after a delay
-                                DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 3) {
-                                    self.captureSession?.startRunning()
-                                }
-                            }
-                            break
-                        }
-                    }
-                }
-            }
-            
-            // Configure the request for optimal text recognition
-            request.recognitionLevel = .accurate
-            request.usesLanguageCorrection = false
-            request.customWords = ["BSD", "S11", "AEON", "ICE", "LOOP", "LINE"]
-            
-            // Create a handler to perform the request
-            let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
-            
-            do {
-                try handler.perform([request])
-            } catch {
-                print("Failed to perform text recognition: \(error)")
-            }
+            // The code below will only run if manualCapture is false (automatic mode)
+            // For automatic text recognition (not used in this implementation)
         }
     }
 }

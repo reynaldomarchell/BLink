@@ -50,6 +50,11 @@ struct ScanResultView: View {
                 .padding()
             }
             
+            // Bus plate number
+            Text("Bus Plate: \(plateNumber)")
+                .font(.headline)
+                .padding(.bottom, 10)
+            
             // Route code badge
             ZStack {
                 Circle()
