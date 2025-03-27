@@ -36,7 +36,7 @@ struct OnboardingView: View {
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(width: 200, height: 50)
-                    .background(Color.blue)
+                    .background(Color(red: 0/255, green: 74/255, blue: 173/255))
                     .cornerRadius(10)
             }
             .padding(.bottom, 40)
@@ -51,4 +51,5 @@ struct OnboardingView: View {
 #Preview {
     OnboardingView()
 }
+
 

@@ -11,73 +11,82 @@ struct TutorialView: View {
     @State private var showHomeView = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("How to use")
+        TutorialContent(isPresented: $showHomeView)
+            .fullScreenCover(isPresented: $showHomeView) {
+                HomeView()
+            }
+    }
+}
+
+struct TutorialContent: View {
+    @Binding var isPresented: Bool
+    
+    var body: some View {
+        VStack {
+            Text("How To Use")
+                .padding(8)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .frame(alignment: .bottom)
+            Text("B-Link Bus Scanner")
+                .padding(.bottom, 18)
                 .font(.title)
                 .fontWeight(.semibold)
-                .padding(.top, 40)
+                .foregroundColor(Color(red: 237/255, green: 100/255, blue: 0/255))
             
-            Text("B-Link Bus Scanner")
-                .font(.system(size: 28, weight: .bold))
-                .foregroundColor(.orange)
-                .padding(.bottom, 20)
-            
-            TutorialStep(number: 1, title: "Allow Camera Use", description: "We need camera permission on your device")
-                .padding(.vertical, 10)
-            
-            TutorialStep(number: 2, title: "Point to bus", description: "Point your camera to bus plate number")
-                .padding(.vertical, 10)
-            
-            TutorialStep(number: 3, title: "See the route!", description: "You can see the schedule and route of scanned bus")
-                .padding(.vertical, 10)
+            VStack(alignment: .leading, spacing: 15) {
+                HStack(alignment: .top) {
+                    Text("1.")
+                    Text("Point your camera at the front of the bus to capture the plate number")
+                        .padding(.leading, 10)
+                }
+                .padding(.horizontal, 10)
+                .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
+                .padding()
+                .background(Color(.white))
+                .cornerRadius(12)
+                
+                HStack(alignment: .top) {
+                    Text("2.")
+                    Text("Hold steady until the app recognizes the bus")
+                        .padding(.leading, 10)
+                }
+                .padding(.horizontal, 10)
+                .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
+                .padding()
+                .background(Color(.white))
+                .cornerRadius(12)
+                
+                HStack(alignment: .top) {
+                    Text("3.")
+                    Text("The app will show you if this bus goes to your destination")
+                        .padding(.leading, 10)
+                }
+                .padding(.horizontal, 10)
+                .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
+                .padding()
+                .background(Color(.white))
+                .cornerRadius(12)
+            }
             
             Spacer()
             
             Button(action: {
-                showHomeView = true
+                isPresented = true
             }) {
                 Text("Continue")
-                    .font(.headline)
+                    .fontWeight(.medium)
+                    .padding()
+                    .frame(width: 120, height: 45)
                     .foregroundColor(.white)
-                    .frame(width: 200, height: 50)
-                    .background(Color.blue)
+                    .background(Color(red: 0/255, green: 74/255, blue: 173/255))
                     .cornerRadius(10)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.bottom, 40)
-        }
-        .padding(.horizontal)
-        .fullScreenCover(isPresented: $showHomeView) {
-            HomeView()
-        }
-    }
-}
-
-struct TutorialStep: View {
-    let number: Int
-    let title: String
-    let description: String
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 20) {
-            Text("\(number)")
-                .font(.system(size: 32, weight: .bold))
-                .frame(width: 40, alignment: .leading)
-            
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
+            Spacer()
         }
         .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
+        .background(Color(red: 245/255, green: 245/255, blue: 245/255))
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
