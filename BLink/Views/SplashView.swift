@@ -14,15 +14,15 @@ struct SplashView: View {
         if isActive {
             OnboardingView()
         } else {
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 Image("AppLogo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 120, height: 120)
+                    .frame(width: 150, height: 150)
                     .cornerRadius(24)
                 
                 Text("B-Link")
-                    .font(.system(size: 48, weight: .bold))
+                    .font(.system(size: 38, weight: .bold))
                     .foregroundColor(Color.orange)
             }
             .onAppear {
