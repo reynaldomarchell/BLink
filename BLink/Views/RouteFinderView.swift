@@ -11,63 +11,82 @@ import SwiftData
 struct RouteFinderView: View {
     @State private var destination = ""
     @State private var showRouteResult = false
+    @StateObject private var locationManager = LocationManager()
+    @State private var currentLocation: String = ""
     @Environment(\.modelContext) private var modelContext
     @Query private var savedLocations: [SavedLocation]
-    
-    // Simulated user's current location
-    private let currentLocation = "Rumah Mantan | Jl. GOP Indah No 1"
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Location and destination inputs
-                VStack(spacing: 15) {
-                    // Current location
-                    HStack(spacing: 15) {
-                        VStack(spacing: 0) {
-                            Circle()
-                                .fill(Color.green)
-                                .frame(width: 12, height: 12)
-                            
-                            Rectangle()
-                                .fill(Color.gray.opacity(0.5))
-                                .frame(width: 2, height: 30)
+                // Unified input section
+                HStack(alignment: .top, spacing: 12) {
+                    // Icon column
+                    VStack(spacing: 6) {
+                        Image(systemName: "figure.stand")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 14, height: 14)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Color.gray)
+                            .cornerRadius(4)
+
+                        VStack(spacing: 2) {
+                            ForEach(0..<4) { _ in
+                                Rectangle()
+                                    .fill(Color.black)
+                                    .frame(width: 2, height: 2)
+                            }
                         }
-                        
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Your Location")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            
-                            Text(currentLocation)
-                                .font(.subheadline)
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            // Refresh location
-                        }) {
-                            Image(systemName: "arrow.clockwise.circle")
-                                .foregroundColor(.yellow)
-                        }
+
+                        Image(systemName: "mappin.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 14, height: 14)
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Color.orange)
+                            .cornerRadius(4)
                     }
-                    
-                    // Destination input
-                    HStack(spacing: 15) {
-                        Circle()
-                            .fill(Color.orange)
-                            .frame(width: 12, height: 12)
-                        
+
+                    VStack(spacing: 12) {
+                        // Top: Current location (disabled input)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Your Location")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+
+                                TextField("Where are you now?", text: $locationManager.currentAddress)
+                                    .font(.subheadline)
+                                    .foregroundColor(currentLocation.isEmpty ? .gray : .primary)
+                            }
+
+                            Spacer()
+
+                            Button(action: {
+                                // Swap action
+                            }) {
+                                Image(systemName: "arrow.up.arrow.down")
+                                    .foregroundColor(.red)
+                                    .padding(6)
+                                    .background(Circle().stroke(Color.yellow, lineWidth: 2))
+                            }
+                        }
+
+                        Divider()
+
+                        // Bottom: Destination input
                         TextField("Where you want to go?", text: $destination)
                             .font(.subheadline)
                     }
                 }
                 .padding()
                 .background(Color(.systemBackground))
-                .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                .padding()
+                .cornerRadius(20)
+                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                .padding(.horizontal)
                 
                 // Recommendations section
                 VStack(alignment: .leading, spacing: 15) {
@@ -181,4 +200,3 @@ struct RouteRecommendationCard: View {
 #Preview {
     RouteFinderView()
 }
-
