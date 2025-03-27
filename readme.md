@@ -2,7 +2,6 @@ B-Link (BLINK!)
 ============
 ![GitHub contributors](https://img.shields.io/github/contributors/reynaldomarchell/Blink)
 ![GitHub Commit](https://img.shields.io/github/commit-activity/w/reynaldomarchell/Blink)
-![CircleCI](https://img.shields.io/circleci/build/github/mzmznasipadang/Binus-Xplore)
 
 
 This is B-Link (or BLINK!), helping you commute efficiently at BSD!
