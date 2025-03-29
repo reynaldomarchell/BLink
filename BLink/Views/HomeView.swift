@@ -43,7 +43,7 @@ struct HomeView: View {
                         .foregroundStyle(.clear)
                         .frame(width: 402, height: 60)
                     HStack {
-                        Text("Blink")
+                        Text("B-Link")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding()
