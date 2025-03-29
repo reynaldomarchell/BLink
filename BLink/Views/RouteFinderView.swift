@@ -14,6 +14,7 @@ struct RouteFinderView: View {
     @StateObject private var locationManager = LocationManager()
     @State private var currentLocation: String = ""
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Query private var savedLocations: [SavedLocation]
     
     var body: some View {
@@ -118,7 +119,7 @@ struct RouteFinderView: View {
             }
             .navigationBarTitle("Route Finder", displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
-                // Go back
+                dismiss()
             }) {
                 HStack {
                     Image(systemName: "chevron.left")
@@ -126,9 +127,10 @@ struct RouteFinderView: View {
                 }
                 .foregroundColor(.blue)
             })
-            .fullScreenCover(isPresented: $showRouteResult) {
-                RouteResultView()
-            }
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $showRouteResult) {
+            RouteResultView()
         }
     }
 }
@@ -200,3 +202,4 @@ struct RouteRecommendationCard: View {
 #Preview {
     RouteFinderView()
 }
+

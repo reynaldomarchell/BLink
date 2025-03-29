@@ -37,11 +37,13 @@ struct TutorialContent: View {
                 Text("1")
                     .font(.system(size: 32, weight: .medium)) // Large step number
                     .padding(.leading, 16)
+                    .foregroundColor(.black)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Point to bus")
                         .font(.title3)
                         .fontWeight(.semibold)
+                        .foregroundColor(.black)
                     
                     Text("Point your camera to the bus plate number")
                         .font(.body)
@@ -60,11 +62,13 @@ struct TutorialContent: View {
                 Text("2")
                     .font(.system(size: 32, weight: .medium)) // Large step number
                     .padding(.leading, 16)
+                    .foregroundColor(.black)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Click the white button")
                         .font(.title3)
                         .fontWeight(.semibold)
+                        .foregroundColor(.black)
                     
                     Text("This will let us scan the bus plate number")
                         .font(.body)
@@ -83,11 +87,13 @@ struct TutorialContent: View {
                 Text("3")
                     .font(.system(size: 32, weight: .medium)) // Large step number
                     .padding(.leading, 16)
+                    .foregroundColor(.black)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("See the route!")
                         .font(.title3)
                         .fontWeight(.semibold)
+                        .foregroundColor(.black)
                     
                     Text("You can see the schedule and the route of the bus here!")
                         .font(.body)
@@ -106,7 +112,7 @@ struct TutorialContent: View {
             Spacer()
             
             Button(action: {
-                //Buat loop ke home cuy :D - Danke Will 
+                //Buat loop ke home cuy :D - Danke Will
                 isPresented.toggle()
             }) {
                 Text("Continue")
