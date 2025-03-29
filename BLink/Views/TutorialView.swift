@@ -28,6 +28,7 @@ struct TutorialContent: View {
                 .font(.title2)
                 .fontWeight(.semibold)
                 .frame(alignment: .bottom)
+                .foregroundColor(.black)
             Text("B-Link Bus Scanner")
                 .font(.largeTitle)
                 .padding(.bottom, 18)
