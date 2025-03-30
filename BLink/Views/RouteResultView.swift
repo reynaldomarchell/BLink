@@ -10,10 +10,6 @@ import MapKit
 
 struct RouteResultView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: -6.301, longitude: 106.652),
-        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-    )
     @State private var showAlert = false
     
     // Origin and destination locations
@@ -23,6 +19,9 @@ struct RouteResultView: View {
     // Bus stop coordinates (simulated)
     private let busStopCoordinates = CLLocationCoordinate2D(latitude: -6.301, longitude: 106.652)
     private let busStopName = "Halte Sektor 1.3"
+    
+    // Map camera position
+    @State private var position: MapCameraPosition = .automatic
     
     var body: some View {
         NavigationView {
@@ -98,12 +97,21 @@ struct RouteResultView: View {
                     
                     // Map view
                     ZStack(alignment: .bottom) {
-                        Map(coordinateRegion: $region, annotationItems: [BusStopLocation(coordinate: busStopCoordinates)]) { location in
-                            MapMarker(coordinate: location.coordinate, tint: .red)
+                        Map(position: $position) {
+                            Marker(busStopName, coordinate: busStopCoordinates)
+                                .tint(.red)
                         }
+                        .mapStyle(.standard)
                         .frame(height: 300)
                         .cornerRadius(12)
                         .padding(.horizontal)
+                        .onAppear {
+                            // Set the initial camera position to focus on the bus stop
+                            position = .region(MKCoordinateRegion(
+                                center: busStopCoordinates,
+                                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                            ))
+                        }
                         
                         VStack {
                             Button(action: {
@@ -156,12 +164,6 @@ struct RouteResultView: View {
             showAlert = true
         }
     }
-}
-
-// Model for map annotation
-struct BusStopLocation: Identifiable {
-    let id = UUID()
-    let coordinate: CLLocationCoordinate2D
 }
 
 #Preview {
