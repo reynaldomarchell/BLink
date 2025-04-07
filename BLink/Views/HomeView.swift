@@ -82,18 +82,10 @@ struct HomeView: View {
                     }
                 }
                 Spacer()
-                    .frame(height: 50)
+                    //.frame(height: 50)
                 
                 // Scanning frame with instructions
                 VStack(spacing: 25) {
-                    Text("Place the bus plate number\ninside the box")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray.opacity(0.7))
-                        .cornerRadius(10)
-                    
                     
                     // Scanning frame - this will be positioned over the camera view
                     ZStack{
@@ -116,8 +108,16 @@ struct HomeView: View {
                         // No preview text
                     }
                     .frame(width: 250, height: 150)
-                    .padding(20)
+                    .padding(60)
                     
+                    //scanning instruction
+                    Text("Place the bus plate number\ninside the box and snap")
+                        .font(.system(size: 15, weight: .medium))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.white)
+                        .padding(11)
+                        .background(Color.gray.opacity(0.3))
+                        .cornerRadius(10)
                     
                     // Capture button
                     Button(action: {
@@ -147,23 +147,23 @@ struct HomeView: View {
                     //Spacer().frame(height: 1)
                     
                     // Divider with "or" text
-                    HStack {
-                        Rectangle()
-                            .frame(height: 2)
-                            .foregroundColor(.white)
-                            .frame(width: 140)
-                        
-                        Text("or")
-                            .font(.title3)
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 8)
-                        
-                        Rectangle()
-                            .frame(height: 2)
-                            .foregroundColor(.white)
-                            .frame(width: 140)
-                    }
-                    .padding(10)
+//                    HStack {
+//                        Rectangle()
+//                            .frame(height: 2)
+//                            .foregroundColor(.white)
+//                            .frame(width: 140)
+//                        
+//                        Text("or")
+//                            .font(.title3)
+//                            .foregroundColor(.white)
+//                            .padding(.horizontal, 8)
+//                        
+//                        Rectangle()
+//                            .frame(height: 2)
+//                            .foregroundColor(.white)
+//                            .frame(width: 140)
+//                    }
+                    .padding(.bottom, 30)
                     
                     // Search route option
                     Button(action: {
@@ -173,7 +173,7 @@ struct HomeView: View {
                             .font(.system(size: 20, weight: .bold))
                             .foregroundColor(.white)
                             .frame(width: 330, height: 43)
-                            .background(Color(red: 237/255, green: 100/255, blue: 0/255))
+                            .background(Color("BlueColor"))
                             .cornerRadius(7)
                     }
 
@@ -189,7 +189,7 @@ struct HomeView: View {
                             .underline()
                             
                     }
-                    .padding(.bottom, 70)
+                    .padding(.bottom, 50)
                 }
             }
         }
