@@ -84,21 +84,22 @@ struct RouteResultView: View {
                     .padding(.horizontal)
                 
                 // Route recommendation
-                RouteRecommendationCard(
-                    from: "Greenwich Park",
-                    to: "Halte Sektor 1.3",
-                    routeCode: "GS",
-                    routeDescription: "Greenwich Park → Sektor 1.3",
-                    duration: 65,
+                RouteRecCardView(card: RouteRecCard(
+                    from: "Halte Keberangkatan",
+                    to: "Halte Tujuan",
+                    routeCode: "KB",
+                    description: "Asal → Tujuan",
+                    duration: 69,
                     distance: 6.9,
                     onTap: {}
-                )
+                ))
                 .padding(.horizontal)
                 
                 // Map view
                 ZStack(alignment: .bottom) {
-                    Map(coordinateRegion: $region, annotationItems: [BusStopLocation(coordinate: busStopCoordinates)]) { location in
-                        MapMarker(coordinate: location.coordinate, tint: .red)
+                    Map(initialPosition: .region(region)) {
+                        Marker(busStopName, coordinate: busStopCoordinates)
+                            .tint(.red)
                     }
                     .frame(height: 300)
                     .cornerRadius(12)
@@ -164,4 +165,3 @@ struct BusStopLocation: Identifiable {
 #Preview {
     RouteResultView()
 }
-
