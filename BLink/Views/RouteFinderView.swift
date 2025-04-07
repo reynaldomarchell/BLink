@@ -45,6 +45,7 @@ struct RouteFinderView: View {
        }
    }
    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -130,9 +131,9 @@ struct RouteFinderView: View {
                 // Recommendations section with history button
                 HStack {
                     Text("Recommendations")
-                        .font(.title2)
+                        .font(.title3)
                         .fontWeight(.bold)
-                    
+                        .padding(.leading)
                     Spacer()
                     
                     Button(action: {
@@ -190,6 +191,7 @@ struct RouteFinderView: View {
             .navigationBarTitle("Route Finder", displayMode: .inline)
             .navigationBarItems(leading: Button(action: {
                 dismiss()
+                
             }) {
                 HStack {
                     Image(systemName: "chevron.left")
