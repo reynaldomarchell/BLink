@@ -169,4 +169,3 @@ struct RouteResultView: View {
 #Preview {
     RouteResultView()
 }
-
