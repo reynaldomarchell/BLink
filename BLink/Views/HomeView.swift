@@ -61,10 +61,10 @@ struct HomeView: View {
                         Button(action: {
                             showRouteHistory = true
                         }) {
-                            Image(systemName: "clock.fill")
+                            Image(systemName: "clock")
                                 .font(.title2)
                                 .foregroundColor(.black)
-                                .padding()
+                                .padding(2)
                                 .background(Circle().fill(Color.white))
                         }
                         
@@ -82,9 +82,10 @@ struct HomeView: View {
                     }
                 }
                 Spacer()
+                    .frame(height: 50)
                 
                 // Scanning frame with instructions
-                VStack(spacing: 40) {
+                VStack(spacing: 25) {
                     Text("Place the bus plate number\ninside the box")
                         .font(.headline)
                         .multilineTextAlignment(.center)
@@ -115,6 +116,7 @@ struct HomeView: View {
                         // No preview text
                     }
                     .frame(width: 250, height: 150)
+                    .padding(20)
                     
                     
                     // Capture button
@@ -139,44 +141,55 @@ struct HomeView: View {
                         }
                     }
                     .disabled(isProcessing)
-                    .padding(.top, 30)
+                    //.padding(.top, 30)
                     
                     // Spacer to maintain layout
-                    Spacer().frame(height: 10)
+                    //Spacer().frame(height: 1)
                     
                     // Divider with "or" text
                     HStack {
                         Rectangle()
-                            .frame(height: 4)
+                            .frame(height: 2)
                             .foregroundColor(.white)
-                            .frame(width: 100)
+                            .frame(width: 140)
                         
-                        Text("OR")
+                        Text("or")
+                            .font(.title3)
                             .foregroundColor(.white)
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, 8)
                         
                         Rectangle()
-                            .frame(height: 4)
+                            .frame(height: 2)
                             .foregroundColor(.white)
-                            .frame(width: 100)
+                            .frame(width: 140)
                     }
-                    //.padding(.vertical)
+                    .padding(10)
                     
                     // Search route option
                     Button(action: {
                         showRouteFinderView = true
                     }) {
-                        HStack {
-                            Text("Search your route ")
-                                .foregroundColor(.white)
-                            
-                            Text("here")
-                                .foregroundColor(.yellow)
-                                .fontWeight(.bold)
-                                .underline()
-                        }
+                        Text("Search Route")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 330, height: 43)
+                            .background(Color(red: 237/255, green: 100/255, blue: 0/255))
+                            .cornerRadius(7)
                     }
-                    .padding(.bottom, 80)
+
+                    
+                    // input bus plate option
+                    HStack {
+                        Text("In a hurry?")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.white)
+                        Text("Input the bus plate here")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.yellow)
+                            .underline()
+                            
+                    }
+                    .padding(.bottom, 70)
                 }
             }
         }
