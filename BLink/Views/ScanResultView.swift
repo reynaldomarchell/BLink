@@ -12,26 +12,54 @@ struct ScanResultView: View {
     let plateNumber: String
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    
+    // Query bus info and routes
+    @Query private var busInfos: [BusInfo]
     @Query private var busRoutes: [BusRoute]
     
-    // Simulated data for the view
+    // Find the matching bus info for the scanned plate
+    private var matchingBusInfo: BusInfo? {
+        // First try exact matching
+        let exactMatch = busInfos.first { $0.plateNumber == plateNumber }
+        if exactMatch != nil {
+            return exactMatch
+        }
+        
+        // Try case-insensitive matching if exact match fails
+        return busInfos.first { $0.plateNumber.lowercased() == plateNumber.lowercased() }
+    }
+    
+    // Find the route for the bus
+    private var busRoute: BusRoute? {
+        guard let routeCode = matchingBusInfo?.routeCode else { return nil }
+        return busRoutes.first { $0.routeCode == routeCode }
+    }
+    
+    // Route info based on the bus info
     private var routeInfo: (code: String, name: String, color: String) {
-        // In a real app, this would come from the database based on the plate number
-        return ("BC", "Greenwich Park - Halte Sektor 1.3", "purple")
+        if let busInfo = matchingBusInfo, let route = busRoute {
+            return (busInfo.routeCode, route.routeName, route.color)
+        }
+        // Fallback if no matching bus info is found
+        return ("--", "Unknown Route", "gray")
     }
     
+    // Get stations from the route
     private var stations: [Station] {
-        // Simulated stations data
-        return [
-            Station(name: "CBD Barat", arrivalTime: createTime(hour: 9, minute: 26), isCurrentStation: false, isPreviousStation: true, isNextStation: false),
-            Station(name: "CBD Timur", arrivalTime: createTime(hour: 9, minute: 30), isCurrentStation: true, isPreviousStation: false, isNextStation: false),
-            Station(name: "Lobby AEON Mall", arrivalTime: createTime(hour: 9, minute: 36), isCurrentStation: false, isPreviousStation: false, isNextStation: true),
-            Station(name: "Lobby AEON 1", arrivalTime: createTime(hour: 9, minute: 38), isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-            Station(name: "Lobby AEON 1", arrivalTime: createTime(hour: 9, minute: 38), isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-            Station(name: "Lobby AEON 1", arrivalTime: createTime(hour: 9, minute: 38), isCurrentStation: false, isPreviousStation: false, isNextStation: false)
-        ]
+        if let route = busRoute {
+            // Use actual stations from the route
+            return route.stations.enumerated().map { index, station in
+                // Add simulated arrival times for display purposes
+                var stationWithTime = station
+                stationWithTime.arrivalTime = createTime(hour: 9, minute: 26 + (index * 5))
+                return stationWithTime
+            }
+        }
+        // Fallback if no route is found
+        return []
     }
     
+    // Modify the body property to show an error message for unrecognized plates
     var body: some View {
         VStack(spacing: 0) {
             // Header with close button
@@ -55,57 +83,256 @@ struct ScanResultView: View {
                 .font(.headline)
                 .padding(.bottom, 10)
             
-            // Route code badge
-            ZStack {
-                Circle()
-                    .fill(colorFromString(routeInfo.color))
-                    .frame(width: 50, height: 50)
+            if isRecognizedPlate {
+                // Route code badge
+                ZStack {
+                    Circle()
+                        .fill(colorFromString(routeInfo.color))
+                        .frame(width: 50, height: 50)
+                    
+                    Text(routeInfo.code)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+                .padding(.bottom, 10)
                 
-                Text(routeInfo.code)
+                // Route name
+                Text(routeInfo.name)
                     .font(.headline)
-                    .foregroundColor(.white)
-            }
-            .padding(.bottom, 10)
-            
-            // Route name
-            Text(routeInfo.name)
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-            
-            Text("Loop Line")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .padding(.bottom, 20)
-            
-            // Stations list
-            ScrollView {
-                VStack(spacing: 0) {
-                    ForEach(Array(stations.enumerated()), id: \.offset) { index, station in
-                        StationRow(station: station, isLast: index == stations.count - 1)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Text("Loop Line")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 20)
+                
+                if stations.isEmpty {
+                    // Show message if no stations are found
+                    VStack(spacing: 20) {
+                        Image(systemName: "bus.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(.gray)
+                        
+                        Text("No route information available")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                        
+                        Text("This bus may not be in service or on a different route")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .padding(.top, 50)
+                } else {
+                    // Stations list
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(Array(stations.enumerated()), id: \.offset) { index, station in
+                                StationRow(station: station, isLast: index == stations.count - 1)
+                            }
+                        }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                        .padding()
                     }
                 }
-                .padding()
+            } else {
+                // Show error message for unrecognized plates
+                VStack(spacing: 25) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 60))
+                        .foregroundColor(.orange)
+                        .padding(.top, 30)
+                    
+                    Text("Plate Number Not Recognized")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    
+                    Text("This bus plate is not in our database. Please make sure you've correctly positioned the camera and try again.")
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 30)
+                    
+                    VStack(spacing: 15) {
+                        Text("Tips:")
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 30)
+                        
+                        HStack(alignment: .top, spacing: 15) {
+                            Image(systemName: "1.circle.fill")
+                                .foregroundColor(.blue)
+                            
+                            Text("Make sure the plate is clearly visible and well-lit")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30)
+                        
+                        HStack(alignment: .top, spacing: 15) {
+                            Image(systemName: "2.circle.fill")
+                                .foregroundColor(.blue)
+                            
+                            Text("Avoid scanning when the bus is moving")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30)
+                        
+                        HStack(alignment: .top, spacing: 15) {
+                            Image(systemName: "3.circle.fill")
+                                .foregroundColor(.blue)
+                            
+                            Text("Position the plate within the scanning frame")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal, 30)
+                    }
+                    .padding(.vertical, 20)
+                    
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Text("Try Again")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(width: 200, height: 50)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .padding(.bottom, 30)
+                    
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
                 .background(Color(.systemBackground))
-                .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                .padding()
+                .cornerRadius(20)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
             }
         }
         .background(Color(.systemGray6).edgesIgnoringSafeArea(.all))
         .onAppear {
-            // Save the bus info to the database
-            saveBusInfo()
+            // Debug print to check what's happening
+            print("Scanned plate: \(plateNumber)")
+            print("Available bus infos: \(busInfos.count)")
+            print("Available bus infos: \(busInfos.map { "\($0.plateNumber): \($0.routeCode)" }.joined(separator: ", "))")
+            
+            if let match = matchingBusInfo {
+                print("Found matching bus info: \(match.plateNumber) with route \(match.routeCode)")
+                updateLastSeen()
+            } else {
+                // Check if this plate is in the predefined list in DataSeeder
+                if isPredefinedPlate(plateNumber) {
+                    print("Plate is in predefined list but not in database, adding it")
+                    addPredefinedBusInfo()
+                } else {
+                    print("No matching bus info found in database")
+                    // We don't add plates that aren't in our predefined list
+                }
+            }
         }
     }
     
     private func saveBusInfo() {
-        let busInfo = BusInfo(
-            plateNumber: plateNumber,
-            routeCode: routeInfo.code,
-            routeName: routeInfo.name
-        )
-        modelContext.insert(busInfo)
+        // We don't want to save bus info for plates that aren't in our predefined list
+        // This function is now just used to update the last seen time for known buses
+        
+        // The matchingBusInfo computed property already checks if the plate exists
+        // If it doesn't find a match, we don't need to do anything here
+        print("No matching bus info found in database for plate: \(plateNumber)")
+        // We don't insert anything into the database for unknown plates
+    }
+
+    // Add a new computed property to check if the plate is recognized
+    private var isRecognizedPlate: Bool {
+        return matchingBusInfo != nil
+    }
+    
+    private func updateLastSeen() {
+        if let busInfo = matchingBusInfo {
+            busInfo.lastSeen = Date()
+            
+            // Try to save the changes
+            do {
+                try modelContext.save()
+                print("Updated last seen for bus: \(busInfo.plateNumber)")
+            } catch {
+                print("Error updating last seen time: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    // Check if the plate is in the predefined list in DataSeeder
+    private func isPredefinedPlate(_ plate: String) -> Bool {
+        // List of predefined plates from DataSeeder
+        let predefinedPlates = [
+            "B 7566 PAA", "B 7366 JE", "B 7366 PAA",
+            "B 7666 PAA", "B 7966 PAA", "B 7002 PGX"
+        ]
+        
+        return predefinedPlates.contains { $0.lowercased() == plate.lowercased() }
+    }
+
+    // Add a bus info entry for a predefined plate
+    private func addPredefinedBusInfo() {
+        // Map of predefined plates to their route info
+        let plateToRouteMap: [String: (code: String, name: String)] = [
+            "B 7566 PAA": ("GS", "Greenwich - Sektor 1.3 Loop Line"),
+            "B 7366 JE": ("ID1", "Intermoda - De Park 1"),
+            "B 7366 PAA": ("ID2", "Intermoda - De Park 2"),
+            "B 7666 PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
+            "B 7966 PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
+            "B 7002 PGX": ("EC", "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line")
+        ]
+        
+        // Find the matching route info (case-insensitive)
+        let matchingPlate = plateToRouteMap.keys.first {
+            $0.lowercased() == plateNumber.lowercased()
+        }
+        
+        if let matchingPlate = matchingPlate, let routeInfo = plateToRouteMap[matchingPlate] {
+            // Create and insert the bus info
+            let busInfo = BusInfo(
+                plateNumber: matchingPlate, // Use the correctly formatted plate number
+                routeCode: routeInfo.code,
+                routeName: routeInfo.name
+            )
+            
+            // Check for duplicates one more time before inserting
+            let duplicateCheck = busInfos.first {
+                $0.plateNumber.lowercased() == matchingPlate.lowercased()
+            }
+            
+            if duplicateCheck == nil {
+                modelContext.insert(busInfo)
+                
+                // Try to save changes
+                do {
+                    try modelContext.save()
+                    print("Added predefined bus info for plate: \(matchingPlate)")
+                } catch {
+                    print("Error adding predefined bus info: \(error.localizedDescription)")
+                }
+            } else {
+                print("Duplicate check caught a potential duplicate entry")
+            }
+        }
     }
     
     private func createTime(hour: Int, minute: Int) -> Date {
@@ -122,6 +349,12 @@ struct ScanResultView: View {
         case "blue": return .blue
         case "green": return .green
         case "orange": return .orange
+        case "lightblue": return Color(red: 64/255, green: 224/255, blue: 208/255)
+        case "pink": return Color(red: 219/255, green: 112/255, blue: 147/255)
+        case "darkgreen": return Color(red: 154/255, green: 205/255, blue: 50/255)
+        case "navy": return Color(red: 0/255, green: 0/255, blue: 128/255)
+        case "red": return .red
+        case "black": return .black
         default: return .gray
         }
     }
@@ -199,7 +432,7 @@ struct StationRow: View {
     }
 }
 
+
 #Preview {
     ScanResultView(plateNumber: "B 1234 XYZ")
 }
-
