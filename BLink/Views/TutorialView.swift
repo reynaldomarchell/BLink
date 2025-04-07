@@ -29,7 +29,7 @@ struct TutorialContent: View {
                 .fontWeight(.semibold)
                 .frame(alignment: .bottom)
                 .foregroundColor(.black)
-            Text("B-Link Bus Scanner")
+            Text("BLink Bus Scanner")
                 .font(.largeTitle)
                 .padding(.bottom, 18)
                 .fontWeight(.semibold)
