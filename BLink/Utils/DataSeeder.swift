@@ -209,7 +209,11 @@ class DataSeeder {
         BusInfo(plateNumber: "B 7366 JE", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
         BusInfo(plateNumber: "B 7366 PAA", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"),
         BusInfo(plateNumber: "B 7566 PAA", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
-        BusInfo(plateNumber: "B 7002 PGX", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line")
+        BusInfo(plateNumber: "B 7002 PGX", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"),
+        BusInfo(plateNumber: "B 7366 JE", routeCode: "ID1", routeName: "Intermoda - De Park 1"),
+        BusInfo(plateNumber: "B 7366 PAA", routeCode: "ID2", routeName: "Intermoda - De Park 2"),
+        BusInfo(plateNumber: "B 7666 PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
+        BusInfo(plateNumber: "B 7966 PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3")
     ]
     
     // Insert data into the model context
