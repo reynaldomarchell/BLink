@@ -50,7 +50,7 @@ struct HomeView: View {
                         .foregroundStyle(.clear)
                         .frame(width: 402, height: 60)
                     HStack {
-                        Text("Blink")
+                        Text("BLink")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding()
@@ -141,55 +141,46 @@ struct HomeView: View {
                         }
                     }
                     .disabled(isProcessing)
-                    //.padding(.top, 30)
                     
-                    // Spacer to maintain layout
-                    //Spacer().frame(height: 1)
-                    
-                    // Divider with "or" text
-//                    HStack {
-//                        Rectangle()
-//                            .frame(height: 2)
-//                            .foregroundColor(.white)
-//                            .frame(width: 140)
-//                        
-//                        Text("or")
-//                            .font(.title3)
-//                            .foregroundColor(.white)
-//                            .padding(.horizontal, 8)
-//                        
-//                        Rectangle()
-//                            .frame(height: 2)
-//                            .foregroundColor(.white)
-//                            .frame(width: 140)
-//                    }
-                    .padding(.bottom, 30)
-                    
-                    // Search route option
-                    Button(action: {
-                        showRouteFinderView = true
-                    }) {
-                        Text("Search Route")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.white)
-                            .frame(width: 330, height: 43)
-                            .background(Color("BlueColor"))
-                            .cornerRadius(7)
-                    }
-
-                    
-                    // input bus plate option
-                    HStack {
-                        Text("In a hurry?")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.white)
-                        Text("Input the bus plate here")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.yellow)
-                            .underline()
+                    // White background container for buttons
+                    VStack(spacing: 12) {
+                        // Search route option
+                        Button(action: {
+                            showRouteFinderView = true
+                        }) {
+                            Text("Search Route")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(.white)
+                                .frame(width: 330, height: 43)
+                                .background(Color("BlueColor"))
+                                .cornerRadius(7)
+                        }
+                        
+                        // input bus plate option
+                        HStack {
+                            Text("In a hurry?")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.black)
                             
+                            Button(action: {
+                                isShowingManualInput = true
+                            }) {
+                                Text("Input the bus plate here")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.orange)
+                                    .underline()
+                            }
+                        }
                     }
-                    .padding(.bottom, 50)
+                    .padding(.vertical, 20)
+                    .padding(.horizontal, 15)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(Color.white.opacity(0.9))
+                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    )
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 30)
                 }
             }
         }
@@ -320,34 +311,15 @@ struct HomeView: View {
                     }
                 }
                 
-                // If no plate was found, try a manual capture anyway
+                // If no plate was found, just end processing without showing manual input
                 if !plateFound {
                     DispatchQueue.main.async {
-                        // If we have any text at all, try to use it
-                        if !recognizedStrings.isEmpty {
-                            // Try to find anything that looks like a plate
-                            for string in recognizedStrings {
-                                // Check if it matches the basic pattern of a license plate
-                                if self.looksLikePlate(string) {
-                                    self.recognizedPlate = string
-                                    self.showScanResult = true
-                                    self.isProcessing = false
-                                    return
-                                }
-                            }
-                            
-                            // If nothing looks like a plate, use the first string
-                            self.isShowingManualInput = true
-                        } else {
-                            self.isShowingManualInput = true
-                        }
                         self.isProcessing = false
                     }
                 }
             } else {
                 DispatchQueue.main.async {
                     self.isProcessing = false
-                    self.isShowingManualInput = true
                 }
             }
         }
@@ -366,7 +338,6 @@ struct HomeView: View {
             print("Failed to perform text recognition: \(error)")
             DispatchQueue.main.async {
                 self.isProcessing = false
-                self.isShowingManualInput = true
             }
         }
     }

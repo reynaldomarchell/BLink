@@ -88,7 +88,7 @@ struct RouteFinderView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
 
-                                TextField(locationManager.currentAddress.isEmpty ? "Current Location" : locationManager.currentAddress, text: $customLocation)
+                                TextField("Enter your location", text: $customLocation)
                                     .font(.subheadline)
                                     .foregroundColor(.primary)
                             }
@@ -102,8 +102,7 @@ struct RouteFinderView: View {
                             } else {
                                 Button(action: {
                                     // Swap location and destination
-                                    let tempLocation = customLocation.isEmpty ?
-                                        locationManager.currentAddress : customLocation
+                                    let tempLocation = customLocation
                                     customLocation = destination
                                     destination = tempLocation
                                 }) {
