@@ -53,10 +53,10 @@ struct HomeView: View {
                         Button(action: {
                             showTutorial = true
                         }) {
-                            Image(systemName: "questionmark.circle")
-                                .font(.title2)
+                            Image(systemName: "questionmark")
+                                //.font(.title3)
                                 .foregroundColor(.black)
-                                .padding()
+                                .padding(8)
                                 .background(Circle().fill(Color.white))
                         }
                         .padding()
@@ -132,7 +132,7 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .frame(width: 100)
                         
-                        Text("or")
+                        Text("OR")
                             .foregroundColor(.white)
                             .padding(.horizontal, 10)
                         
@@ -141,7 +141,7 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .frame(width: 100)
                     }
-                    .padding(.vertical)
+                    //.padding(.vertical)
                     
                     // Search route option
                     Button(action: {
@@ -157,7 +157,7 @@ struct HomeView: View {
                                 .underline()
                         }
                     }
-                    .padding(.bottom, 50)
+                    .padding(.bottom, 80)
                 }
             }
         }
