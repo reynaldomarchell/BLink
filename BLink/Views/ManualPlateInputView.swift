@@ -19,7 +19,7 @@ struct ManualPlateInputView: View {
                     .font(.title2)
                     .fontWeight(.bold)
                 
-                TextField("e.g., S11 BSD", text: $plateNumber)
+                TextField("e.g. B 1234 XYZ", text: $plateNumber)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)

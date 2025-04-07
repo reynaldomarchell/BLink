@@ -14,6 +14,7 @@ struct RouteFinderView: View {
     @StateObject private var locationManager = LocationManager()
     @State private var currentLocation: String = ""
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Query private var savedLocations: [SavedLocation]
     @Environment(\.dismiss) private var dismiss
     
@@ -128,9 +129,10 @@ struct RouteFinderView: View {
                 }
                 .foregroundColor(.blue)
             })
-            .fullScreenCover(isPresented: $showRouteResult) {
-                RouteResultView()
-            }
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $showRouteResult) {
+            RouteResultView()
         }
     }
 }
@@ -203,3 +205,4 @@ struct RouteFinderView: View {
 #Preview {
     RouteFinderView()
 }
+

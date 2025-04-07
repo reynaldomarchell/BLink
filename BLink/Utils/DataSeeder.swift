@@ -53,8 +53,10 @@ class DataSeeder {
         
         // Seed bus info
         let busInfos = [
-            BusInfo(plateNumber: "S11 BSD", routeCode: "GS", routeName: "Greenwich Park - Halte Sektor 1.3"),
-            BusInfo(plateNumber: "B 7771 KJA", routeCode: "BC", routeName: "The Breeze - Lobby AEON")
+            BusInfo(plateNumber: "B 7366 JE", routeCode: "GS", routeName: "Greenwich Park - Halte Sektor 1.3"),
+            BusInfo(plateNumber: "В 7366 PAA", routeCode: "BC", routeName: "The Breeze - Lobby AEON"),
+            BusInfo(plateNumber: "B 7566 PAA", routeCode: "GS", routeName: "Greenwich Park - Halte Sektor 1.3"),
+            BusInfo(plateNumber: "B 7002 PGX", routeCode: "BC", routeName: "The Breeze - Lobby AEON")
         ]
         
         // Insert data into the model context

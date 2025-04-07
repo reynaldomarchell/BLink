@@ -200,6 +200,6 @@ struct StationRow: View {
 }
 
 #Preview {
-    ScanResultView(plateNumber: "S11 BSD")
+    ScanResultView(plateNumber: "B 1234 XYZ")
 }
 
