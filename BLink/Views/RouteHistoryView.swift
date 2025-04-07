@@ -10,6 +10,7 @@ import SwiftData
 
 struct RouteHistoryView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \BusInfo.lastSeen, order: .reverse) private var recentBuses: [BusInfo]
     
     var onSelectBus: (String) -> Void
@@ -53,13 +54,17 @@ struct RouteHistoryView: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
+                        .onDelete(perform: deleteBusInfo)
                     }
                 }
             }
             .navigationBarTitle("Bus History", displayMode: .inline)
-            .navigationBarItems(leading: Button("Close") {
-                dismiss()
-            })
+            .navigationBarItems(
+                leading: Button("Close") {
+                    dismiss()
+                },
+                trailing: EditButton()
+            )
         }
     }
     
@@ -67,6 +72,21 @@ struct RouteHistoryView: View {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
         return formatter.localizedString(for: date, relativeTo: Date())
+    }
+    
+    private func deleteBusInfo(at offsets: IndexSet) {
+        for index in offsets {
+            let busInfo = recentBuses[index]
+            modelContext.delete(busInfo)
+        }
+        
+        // Try to save changes
+        do {
+            try modelContext.save()
+            print("Successfully deleted bus info")
+        } catch {
+            print("Error deleting bus info: \(error.localizedDescription)")
+        }
     }
 }
 
@@ -107,4 +127,3 @@ struct RouteCodeBadge: View {
 #Preview {
     RouteHistoryView(onSelectBus: { _ in })
 }
-
