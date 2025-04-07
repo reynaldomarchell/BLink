@@ -132,8 +132,9 @@ struct RouteFinderView: View {
                 // Recommendations section with history button
                 HStack {
                     Text("Recommendations")
-                        .font(.title2)
+                        .font(.title3)
                         .fontWeight(.bold)
+                        .padding(.leading)
                     Spacer()
                     
                     Button(action: {
