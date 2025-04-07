@@ -9,68 +9,180 @@ import Foundation
 import SwiftData
 
 class DataSeeder {
-    static func seedInitialData(modelContext: ModelContext) {
-        // Seed bus routes
-        let busRoutes = [
-            BusRoute(
-                routeName: "Greenwich Park - Halte Sektor 1.3",
-                startPoint: "Greenwich Park",
-                endPoint: "Halte Sektor 1.3",
-                stations: [
-                    Station(name: "Greenwich Park", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "CBD Barat", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "CBD Timur", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "Lobby AEON Mall", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "Halte Sektor 1.3", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false)
-                ],
-                routeCode: "GS",
-                color: "green",
-                estimatedTime: 65,
-                distance: 6.9
-            ),
-            BusRoute(
-                routeName: "The Breeze - Lobby AEON",
-                startPoint: "The Breeze",
-                endPoint: "Lobby AEON",
-                stations: [
-                    Station(name: "The Breeze", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "AEON", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "ICE Loop Line", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false),
-                    Station(name: "Lobby AEON", arrivalTime: nil, isCurrentStation: false, isPreviousStation: false, isNextStation: false)
-                ],
-                routeCode: "BC",
-                color: "purple",
-                estimatedTime: 65,
-                distance: 6.9
-            )
-        ]
+   static func seedInitialData(modelContext: ModelContext) {
+    print("Starting data seeding...")
+    
+    // Seed bus routes
+    let busRoutes = [
+        BusRoute(
+            routeName: "The Breeze - AEON - ICE - The Breeze Loop Line",
+            startPoint: "The Breeze",
+            endPoint: "The Breeze",
+            stations: [
+                Station(name: "The Breeze", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Timur 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Selatan", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "AEON Mall 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "AEON Mall 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CDB Utara 3", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE Business Park", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 6", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 5", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Barat 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Barat 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Lobby AEON Mall", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Timur 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Navapark 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Green cove", isCurrentStation: false, isPreviousStation: false, isNextStation: false)
+            ],
+            routeCode: "BC",
+            color: "purple",
+            estimatedTime: 65,
+            distance: 6.9,
+            routeDescription: "The Breeze → AEON → ICE → The Breeze Loop Line"
+        ),
+        BusRoute(
+            routeName: "Greenwich - Sektor 1.3 Loop Line",
+            startPoint: "Greenwich Park",
+            endPoint: "Halte Sektor 1.3",
+            stations: [
+                Station(name: "Greenwich Park", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Timur 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Selatan", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "AEON Mall 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "AEON Mall 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CDB Utara 3", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE Business Park", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 6", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 5", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Barat 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Barat 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Lobby AEON Mall", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Timur 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Navapark 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Green cove", isCurrentStation: false, isPreviousStation: false, isNextStation: false)
+            ],
+            routeCode: "GS",
+            color: "green",
+            estimatedTime: 65,
+            distance: 6.9,
+            routeDescription: "Greenwich - Sektor 1.3 Loop Line"
+        )
+    ]
+    
+    // Seed bus info - CRITICAL: Make sure B 7366 JE is assigned to GS route
+    let busInfos = [
+        BusInfo(plateNumber: "B 7366 JE", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
+        BusInfo(plateNumber: "B 7366 PAA", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"),
+        BusInfo(plateNumber: "B 7566 PAA", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
+        BusInfo(plateNumber: "B 7002 PGX", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line")
+    ]
+    
+    // Insert data into the model context
+    for route in busRoutes {
+        modelContext.insert(route)
+        print("Inserted route: \(route.routeCode)")
+    }
+    
+    for busInfo in busInfos {
+        modelContext.insert(busInfo)
+    }
+    
+    // Try to save changes immediately
+    do {
+        try modelContext.save()
+        print("Successfully saved model context after seeding")
+    } catch {
+        print("Error saving model context: \(error)")
+    }
+    
+    // Print debug info
+    print("Data seeding completed successfully")
+    print("Seeded bus infos: \(busInfos.map { $0.plateNumber })")
+    print("Seeded routes: \(busRoutes.map { $0.routeCode })")
+    
+    // Verify routes were added
+    do {
+        let descriptor = FetchDescriptor<BusRoute>()
+        let count = try modelContext.fetchCount(descriptor)
+        print("After seeding, database has \(count) routes")
+    } catch {
+        print("Error verifying route count: \(error)")
+    }
+}
+
+   // Function to clear all existing data
+   static func clearAllData(modelContext: ModelContext) {
+       do {
+           // Clear BusInfo
+           let busInfoDescriptor = FetchDescriptor<BusInfo>()
+           let busInfos = try modelContext.fetch(busInfoDescriptor)
+           for busInfo in busInfos {
+               modelContext.delete(busInfo)
+           }
+           
+           // Clear BusRoute
+           let routeDescriptor = FetchDescriptor<BusRoute>()
+           let routes = try modelContext.fetch(routeDescriptor)
+           for route in routes {
+               modelContext.delete(route)
+           }
+           
+           // Try to save changes immediately
+           try modelContext.save()
+           print("All existing data cleared successfully")
+       } catch {
+           print("Error clearing data: \(error)")
+       }
+   }
+    
+    // Add a function to update station status based on current time
+    static func updateStationStatus(route: BusRoute) {
+        // Get the current time
+        let currentTime = Date()
+        let calendar = Calendar.current
+        let currentHour = calendar.component(.hour, from: currentTime)
+        let currentMinute = calendar.component(.minute, from: currentTime)
         
-        // Seed saved locations
-        let savedLocations = [
-            SavedLocation(name: "Home", address: "Rumah Mantan | Jl. GOP Indah No 1", isHome: true),
-            SavedLocation(name: "Office", address: "Gedung Apel | Jl. GOP Indah No 9", isHome: false)
-        ]
+        // Calculate the total minutes since midnight
+        let currentTotalMinutes = currentHour * 60 + currentMinute
         
-        // Seed bus info
-        let busInfos = [
-            BusInfo(plateNumber: "B 7366 JE", routeCode: "GS", routeName: "Greenwich Park - Halte Sektor 1.3"),
-            BusInfo(plateNumber: "В 7366 PAA", routeCode: "BC", routeName: "The Breeze - Lobby AEON"),
-            BusInfo(plateNumber: "B 7566 PAA", routeCode: "GS", routeName: "Greenwich Park - Halte Sektor 1.3"),
-            BusInfo(plateNumber: "B 7002 PGX", routeCode: "BC", routeName: "The Breeze - Lobby AEON")
-        ]
+        // Determine which station is current based on time
+        // This is a simplified algorithm - in a real app, you'd use actual bus schedules
+        let totalStations = route.stations.count
+        let cycleTime = route.estimatedTime // minutes for a full cycle
         
-        // Insert data into the model context
-        for route in busRoutes {
-            modelContext.insert(route)
+        // Calculate which station in the cycle we're at
+        let minutesIntoDay = currentTotalMinutes % cycleTime
+        let stationIndex = Int(Double(minutesIntoDay) / Double(cycleTime) * Double(totalStations)) % totalStations
+        
+        // Update station statuses
+        for i in 0..<route.stations.count {
+            route.stations[i].isCurrentStation = (i == stationIndex)
+            route.stations[i].isPreviousStation = (i == (stationIndex - 1 + totalStations) % totalStations)
+            route.stations[i].isNextStation = (i == (stationIndex + 1) % totalStations)
+            
+            // Set arrival times
+            let minutesFromNow = ((i - stationIndex + totalStations) % totalStations) * (cycleTime / totalStations)
+            route.stations[i].arrivalTime = calendar.date(byAdding: .minute, value: minutesFromNow, to: currentTime)
         }
-        
-        for location in savedLocations {
-            modelContext.insert(location)
-        }
-        
-        for busInfo in busInfos {
-            modelContext.insert(busInfo)
-        }
+    }
+
+    // Add a function to get the nearest bus stop
+    static func getNearestBusStop(latitude: Double, longitude: Double) -> Station? {
+        // This would normally use actual geolocation data
+        // For this demo, we'll just return a fixed station
+        return Station(
+            name: "The Breeze",
+            arrivalTime: Date(),
+            isCurrentStation: true,
+            isPreviousStation: false,
+            isNextStation: false
+        )
     }
 }
 
