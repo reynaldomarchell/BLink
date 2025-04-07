@@ -12,18 +12,14 @@ struct SplashView: View {
     
     var body: some View {
         if isActive {
-            OnboardingView()
+            TutorialView()
         } else {
             VStack(spacing: 10) {
                 Image("AppLogo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 150, height: 150)
+                    .frame(width: 250, height: 250)
                     .cornerRadius(24)
-                
-                Text("B-Link")
-                    .font(.system(size: 38, weight: .bold))
-                    .foregroundColor(Color.orange)
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
