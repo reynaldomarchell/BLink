@@ -110,7 +110,7 @@ struct RouteResultView: View {
                               
                               ScrollView(.horizontal, showsIndicators: false) {
                                   HStack(spacing: 12) {
-                                      ForEach(route.stations, id: \.name) { station in
+                                      ForEach(Array(route.stations.enumerated()), id: \.offset) { index, station in
                                           StationCard(station: station)
                                       }
                                   }
@@ -222,6 +222,18 @@ struct RouteResultView: View {
           return Image("bcLine")
       case "GS":
           return Image("gsLine")
+      case "ID1":
+          return Image("id1Line")
+      case "IV":
+          return Image("ivLine")
+      case "IS":
+          return Image("id1Line")
+      case "ID2":
+          return Image("id1Line")
+      case "EC":
+          return Image("id1Line")
+      case "BB":
+          return Image("id1Line")
       default:
           // Fallback to a placeholder for other routes - must return Image type without modifiers
           return Image(systemName: "map")
