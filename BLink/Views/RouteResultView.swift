@@ -14,6 +14,10 @@ struct RouteResultView: View {
   
   @Environment(\.dismiss) private var dismiss
   @State private var showAlert = false
+  @State private var showEnlargedMap = false
+  @State private var mapScale: CGFloat = 1.0
+  @State private var mapOffset: CGSize = .zero
+  @State private var lastDragValue: CGSize = .zero
   @StateObject private var locationManager = LocationManager()
   @Environment(\.modelContext) private var modelContext
   
@@ -21,161 +25,194 @@ struct RouteResultView: View {
   private let startStationCoordinates = CLLocationCoordinate2D(latitude: -6.298, longitude: 106.648)
   
   var body: some View {
-      NavigationView {
-          ScrollView {
-              VStack(spacing: 12) {
-                  // Location and destination display
-                  VStack(spacing: 8) {
-                      // Origin location
-                      HStack(spacing: 12) {
-                          VStack(spacing: 0) {
+      ZStack {
+          // Main content
+          NavigationView {
+              ScrollView {
+                  VStack(spacing: 12) {
+                      // Location and destination display
+                      VStack(spacing: 8) {
+                          // Origin location
+                          HStack(spacing: 12) {
+                              VStack(spacing: 0) {
+                                  Circle()
+                                      .fill(Color.green)
+                                      .frame(width: 10, height: 10)
+                                  
+                                  Rectangle()
+                                      .fill(Color.gray.opacity(0.5))
+                                      .frame(width: 2, height: 24)
+                              }
+                              
+                              VStack(alignment: .leading, spacing: 2) {
+                                  Text("Your Location")
+                                      .font(.caption)
+                                      .foregroundColor(.secondary)
+                                  
+                                  Text(locationManager.currentAddress.isEmpty ? "Current Location" : locationManager.currentAddress)
+                                      .font(.subheadline)
+                              }
+                              
+                              Spacer()
+                          }
+                          
+                          // Destination
+                          HStack(spacing: 12) {
                               Circle()
-                                  .fill(Color.green)
+                                  .fill(Color.orange)
                                   .frame(width: 10, height: 10)
                               
-                              Rectangle()
-                                  .fill(Color.gray.opacity(0.5))
-                                  .frame(width: 2, height: 24)
-                          }
-                          
-                          VStack(alignment: .leading, spacing: 2) {
-                              Text("Your Location")
-                                  .font(.caption)
-                                  .foregroundColor(.secondary)
+                              VStack(alignment: .leading, spacing: 2) {
+                                  Text("Your Destination")
+                                      .font(.caption)
+                                      .foregroundColor(.secondary)
+                                  
+                                  Text(route.endPoint)
+                                      .font(.subheadline)
+                              }
                               
-                              Text(locationManager.currentAddress.isEmpty ? "Current Location" : locationManager.currentAddress)
-                                  .font(.subheadline)
+                              Spacer()
                           }
-                          
-                          Spacer()
                       }
-                      
-                      // Destination
-                      HStack(spacing: 12) {
-                          Circle()
-                              .fill(Color.orange)
-                              .frame(width: 10, height: 10)
-                          
-                          VStack(alignment: .leading, spacing: 2) {
-                              Text("Your Destination")
-                                  .font(.caption)
-                                  .foregroundColor(.secondary)
-                              
-                              Text(route.endPoint)
-                                  .font(.subheadline)
-                          }
-                          
-                          Spacer()
-                      }
-                  }
-                  .padding(.horizontal, 16)
-                  .padding(.vertical, 12)
-                  .background(Color(.systemBackground))
-                  .cornerRadius(12)
-                  .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-                  .padding(.horizontal, 16)
-                  .padding(.top, 8)
-                  
-                  // Route Details section
-                  VStack(alignment: .leading, spacing: 12) {
-                      Text("Route Details")
-                          .font(.title3)
-                          .fontWeight(.bold)
-                          .padding(.horizontal, 16)
-                          .padding(.top, 4)
-                      
-                      // Route recommendation
-                      CompactRouteCard(
-                          from: route.startPoint,
-                          to: route.endPoint,
-                          routeCode: route.routeCode,
-                          duration: route.estimatedTime,
-                          distance: route.distance,
-                          routeDescription: route.routeDescription ?? "\(route.startPoint) → \(route.endPoint)"
-                      )
                       .padding(.horizontal, 16)
+                      .padding(.vertical, 12)
+                      .background(Color(.systemBackground))
+                      .cornerRadius(12)
+                      .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                      .padding(.horizontal, 16)
+                      .padding(.top, 8)
                       
-                      // Stations list
-                      VStack(alignment: .leading, spacing: 4) {
-                          Text("Stations")
-                              .font(.headline)
+                      // Route Details section
+                      VStack(alignment: .leading, spacing: 12) {
+                          Text("Route Details")
+                              .font(.title3)
+                              .fontWeight(.bold)
                               .padding(.horizontal, 16)
                               .padding(.top, 4)
                           
-                          ScrollView(.horizontal, showsIndicators: false) {
-                              HStack(spacing: 12) {
-                                  ForEach(route.stations, id: \.name) { station in
-                                      StationCard(station: station)
-                                  }
-                              }
-                              .padding(.horizontal, 16)
-                              .padding(.vertical, 4)
-                          }
-                      }
-                      
-                      // Static Route Map Image
-                      VStack(alignment: .leading, spacing: 8) {
-                          Text("Route Map")
-                              .font(.headline)
-                              .padding(.horizontal, 16)
-                              .padding(.top, 4)
+                          // Route recommendation
+                          CompactRouteCard(
+                              from: route.startPoint,
+                              to: route.endPoint,
+                              routeCode: route.routeCode,
+                              duration: route.estimatedTime,
+                              distance: route.distance,
+                              routeDescription: route.routeDescription ?? "\(route.startPoint) → \(route.endPoint)"
+                          )
+                          .padding(.horizontal, 16)
                           
-                          VStack(spacing: 16) {
-                              // Display static route map image based on route code
-                              routeMapImage
-                                  .resizable()
-                                  .aspectRatio(contentMode: .fit)
-                                  .frame(maxWidth: .infinity)
-                                  .cornerRadius(12)
+                          // Stations list
+                          VStack(alignment: .leading, spacing: 4) {
+                              Text("Stations")
+                                  .font(.headline)
                                   .padding(.horizontal, 16)
+                                  .padding(.top, 4)
                               
-                              Button(action: {
-                                  openMapsDirections()
-                              }) {
-                                  Text("Go to Bus Stop")
-                                      .font(.headline)
-                                      .foregroundColor(.white)
-                                      .frame(maxWidth: .infinity)
-                                      .frame(height: 44)
-                                      .background(Color.blue)
-                                      .cornerRadius(10)
+                              ScrollView(.horizontal, showsIndicators: false) {
+                                  HStack(spacing: 12) {
+                                      ForEach(route.stations, id: \.name) { station in
+                                          StationCard(station: station)
+                                      }
+                                  }
+                                  .padding(.horizontal, 16)
+                                  .padding(.vertical, 4)
                               }
-                              .padding(.horizontal, 32)
-                              .padding(.bottom, 16)
+                          }
+                          
+                          // Static Route Map Image
+                          VStack(alignment: .leading, spacing: 8) {
+                              Text("Route Map")
+                                  .font(.headline)
+                                  .padding(.horizontal, 16)
+                                  .padding(.top, 4)
+                              
+                              VStack(spacing: 16) {
+                                  // Display static route map image based on route code
+                                  routeMapImage
+                                      .resizable()
+                                      .aspectRatio(contentMode: .fit)
+                                      .frame(maxWidth: .infinity)
+                                      .cornerRadius(12)
+                                      .padding(.horizontal, 16)
+                                      .onTapGesture {
+                                          showEnlargedMap = true
+                                          mapScale = 1.0 // Reset scale when opening
+                                          mapOffset = .zero // Reset offset when opening
+                                          lastDragValue = .zero
+                                      }
+                                  
+                                  Button(action: {
+                                      openMapsDirections()
+                                  }) {
+                                      Text("Go to Bus Stop")
+                                          .font(.headline)
+                                          .foregroundColor(.white)
+                                          .frame(maxWidth: .infinity)
+                                          .frame(height: 44)
+                                          .background(Color.blue)
+                                          .cornerRadius(10)
+                                  }
+                                  .padding(.horizontal, 32)
+                                  .padding(.bottom, 16)
+                              }
                           }
                       }
                   }
+                  .padding(.bottom, 16)
               }
-              .padding(.bottom, 16)
+              .navigationBarTitle("Route Result", displayMode: .inline)
+              .navigationBarItems(leading: Button(action: {
+                  dismiss()
+              }) {
+                  HStack {
+                      Image(systemName: "chevron.left")
+                      Text("Back")
+                  }
+                  .foregroundColor(.blue)
+              })
+              .onAppear {
+                  // Request location when view appears
+                  if locationManager.currentAddress.isEmpty {
+                      locationManager.requestLocation()
+                  }
+                  
+                  // Update station statuses based on current time
+                  DataSeeder.updateStationStatus(route: route)
+              }
           }
-          .navigationBarTitle("Route Result", displayMode: .inline)
-          .navigationBarItems(leading: Button(action: {
-              dismiss()
-          }) {
-              HStack {
-                  Image(systemName: "chevron.left")
-                  Text("Back")
+          .navigationViewStyle(StackNavigationViewStyle())
+          .alert(isPresented: $showAlert) {
+              Alert(
+                  title: Text("Could Not Open Maps"),
+                  message: Text("There was a problem opening Maps to get directions to the bus stop."),
+                  dismissButton: .default(Text("OK"))
+              )
+          }
+          
+          // Enlarged map overlay
+          if showEnlargedMap {
+              ZStack {
+                  // Semi-transparent background that can be tapped to dismiss
+                  Color.black.opacity(0.7)
+                      .edgesIgnoringSafeArea(.all)
+                      .onTapGesture {
+                          showEnlargedMap = false
+                      }
+                  
+                  // Map image with zoom and pan gestures
+                  ZoomableScrollView(scale: $mapScale, offset: $mapOffset) {
+                      routeMapImage
+                          .resizable()
+                          .aspectRatio(contentMode: .fit)
+                          .frame(maxWidth: .infinity, maxHeight: .infinity)
+                          .padding(.horizontal, 20)
+                  }
               }
-              .foregroundColor(.blue)
-          })
-          .onAppear {
-              // Request location when view appears
-              if locationManager.currentAddress.isEmpty {
-                  locationManager.requestLocation()
-              }
-              
-              // Update station statuses based on current time
-              DataSeeder.updateStationStatus(route: route)
+              .zIndex(2)
+              .transition(.opacity)
           }
       }
-      .navigationViewStyle(StackNavigationViewStyle())
-      .alert(isPresented: $showAlert) {
-          Alert(
-              title: Text("Could Not Open Maps"),
-              message: Text("There was a problem opening Maps to get directions to the bus stop."),
-              dismissButton: .default(Text("OK"))
-          )
-      }
+      .animation(.easeInOut, value: showEnlargedMap)
   }
   
   // Get the appropriate route map image based on route code
@@ -205,6 +242,75 @@ struct RouteResultView: View {
           showAlert = true
       }
   }
+}
+
+// Custom zoomable scroll view for smooth zooming and panning
+struct ZoomableScrollView<Content: View>: View {
+    @Binding var scale: CGFloat
+    @Binding var offset: CGSize
+    @State private var dragOffset: CGSize = .zero
+    @State private var lastScale: CGFloat = 1.0
+    let content: () -> Content
+    
+    var body: some View {
+        GeometryReader { geometry in
+            content()
+                .scaleEffect(scale)
+                .offset(x: offset.width + dragOffset.width, y: offset.height + dragOffset.height)
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            let delta = value / lastScale
+                            lastScale = value
+                            
+                            // Limit scale to reasonable bounds
+                            let newScale = scale * delta
+                            scale = min(max(newScale, 0.5), 5.0)
+                        }
+                        .onEnded { _ in
+                            lastScale = 1.0
+                        }
+                )
+                .simultaneousGesture(
+                    DragGesture()
+                        .onChanged { value in
+                            // Only allow panning when zoomed in
+                            if scale > 1.0 {
+                                // Apply smooth drag with appropriate sensitivity
+                                dragOffset = value.translation
+                            }
+                        }
+                        .onEnded { value in
+                            // Update the final offset
+                            if scale > 1.0 {
+                                // Calculate max allowed offset based on zoom level
+                                let maxOffsetX = geometry.size.width * (scale - 1) / 2
+                                let maxOffsetY = geometry.size.height * (scale - 1) / 2
+                                
+                                // Calculate new offset with constraints
+                                let newOffsetX = offset.width + value.translation.width
+                                let newOffsetY = offset.height + value.translation.height
+                                
+                                // Apply constraints to keep image on screen
+                                offset = CGSize(
+                                    width: min(maxOffsetX, max(-maxOffsetX, newOffsetX)),
+                                    height: min(maxOffsetY, max(-maxOffsetY, newOffsetY))
+                                )
+                                
+                                // Reset drag offset
+                                dragOffset = .zero
+                            }
+                        }
+                )
+                .onTapGesture(count: 2) {
+                    withAnimation(.spring()) {
+                        scale = 1.0
+                        offset = .zero
+                        dragOffset = .zero
+                    }
+                }
+        }
+    }
 }
 
 // More compact route card for smaller screens
@@ -289,7 +395,6 @@ struct CompactRouteCard: View {
       }
   }
 }
-
 
 #Preview {
   // Create a sample route for preview
