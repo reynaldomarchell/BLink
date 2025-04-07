@@ -279,6 +279,45 @@ class DataSeeder {
             distance: 6.9,
             routeDescription: "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line"
         ),
+        BusRoute(
+            routeName: "Big Bus Line",
+            startPoint: "Intermoda",
+            endPoint: "Intermoda",
+            stations: [
+                Station(name: "Intermoda", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Simplicity 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Edutown 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Edutown 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 6", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "ICE 5", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Froggy", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Gramedia", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Astra", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Court Mega Store", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "QBIG 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Lulu", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "QBIG 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "QBIG 3", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "BCA", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "FBL 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "FBL 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "GOP 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "SML Plaza", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "The Breeze", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Timur 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "AEON Mall / Sky House", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "CBD Barat 2", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Simplicity 1", isCurrentStation: false, isPreviousStation: false, isNextStation: false),
+                Station(name: "Intermoda", isCurrentStation: false, isPreviousStation: false, isNextStation: false)
+            ],
+            routeCode: "BB",
+            color: "red",
+            estimatedTime: 53,
+            distance: 6.9,
+            routeDescription: "The Big Bus Electric | INTERMODA - I C E - QBIG - ARA RASA -THE BREEZE - SKY HOUSE / AEON MALL - INTERMODA"
+        ),
     ]
     
     // Seed bus info - CRITICAL: Make sure B 7366 JE is assigned to GS route
