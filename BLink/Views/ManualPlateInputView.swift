@@ -6,36 +6,41 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ManualPlateInputView: View {
     @State private var plateNumber = ""
     @Environment(\.dismiss) private var dismiss
+    @Query private var busInfos: [BusInfo]
     var onSubmit: (String) -> Void
     
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Text("Enter Bus Plate Number")
-                    .font(.title2)
+                Text("Select The \nBus Plate Number")
+                    .font(.title)
                     .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
                 
-                TextField("e.g. B 1234 XYZ", text: $plateNumber)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                    .autocapitalization(.allCharacters) // Auto-capitalize input
-                
-                Text("Examples: B 7366 JE, B7366JE, b 7366 je")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal)
+                // Replace the text field with a picker
+                Picker("Bus Plate Number", selection: $plateNumber) {
+                    Text("Select a plate").tag("")
+                    ForEach(busInfos, id: \.plateNumber) { busInfo in
+                        Text(busInfo.plateNumber).tag(busInfo.plateNumber)
+                    }
+                }
+                .pickerStyle(.automatic) // You can change this to .menu if preferred
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding(.horizontal)
                 
                 Button(action: {
                     if !plateNumber.isEmpty {
                         // Normalize the plate number before submitting
                         let normalizedPlate = normalizePlateNumber(plateNumber)
                         onSubmit(normalizedPlate)
+                        dismiss()
                     }
                 }) {
                     Text("Submit")
@@ -56,7 +61,7 @@ struct ManualPlateInputView: View {
         }
     }
     
-    // Function to normalize plate number format
+    // Keep your existing normalizePlateNumber function
     private func normalizePlateNumber(_ plate: String) -> String {
         // Convert to uppercase
         let uppercased = plate.uppercased()
@@ -108,5 +113,18 @@ struct ManualPlateInputView: View {
 }
 
 #Preview {
-    ManualPlateInputView(onSubmit: { _ in })
+    // For the preview to work with SwiftData, you need to provide a model container
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: BusInfo.self, configurations: config)
+        
+        // Add some sample data for the preview
+        let sampleBusInfo = BusInfo(plateNumber: "B 1234 XYZ", routeCode: "BC", routeName: "Sample Route")
+        container.mainContext.insert(sampleBusInfo)
+        
+        return ManualPlateInputView(onSubmit: { _ in })
+            .modelContainer(container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
+    }
 }
