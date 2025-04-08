@@ -63,7 +63,7 @@ struct RouteHistoryView: View {
                 leading: EditButton(),
                 trailing: Button("Close") {
                     dismiss()
-                },
+                }
             )
         }
     }
