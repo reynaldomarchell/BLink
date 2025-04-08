@@ -71,8 +71,6 @@ struct HomeView: View {
                         // Tutorial button
                         Button(action: {
                             showTutorial = true
-                            // Uncomment the line below if you want the button to also reset the tutorial flag
-                            // resetTutorial()
                         }) {
                             Image(systemName: "questionmark")
                                 .foregroundColor(.black)
@@ -83,7 +81,6 @@ struct HomeView: View {
                     }
                 }
                 Spacer()
-                    //.frame(height: 50)
                 
                 // Scanning frame with instructions
                 VStack(spacing: 25) {
@@ -197,6 +194,10 @@ struct HomeView: View {
                 print("Available route codes: \(busRoutes.map { $0.routeCode })")
             }
         }
+        .fullScreenCover(item: $selectedBusForScan) { busInfo in
+            // Use a fullScreenCover with an identifiable item for better state management
+            ScanResultView(plateNumber: busInfo.plateNumber)
+        }
         .sheet(isPresented: $showScanResult) {
             if let plate = recognizedPlate {
                 ScanResultView(plateNumber: plate)
@@ -229,11 +230,33 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showRouteHistory) {
             RouteHistoryView(onSelectBus: { plateNumber in
-                recognizedPlate = plateNumber
-                showRouteHistory = false
-                showScanResult = true
+                // Find the bus info for this plate number
+                if let busInfo = findBusInfo(for: plateNumber) {
+                    // Set the selected bus and close the history view
+                    selectedBusForScan = busInfo
+                    showRouteHistory = false
+                }
             })
         }
+    }
+    
+    // Add a new state variable to track the selected bus from history
+    @State private var selectedBusForScan: IdentifiableBusInfo?
+    
+    // Helper function to find bus info for a plate number
+    private func findBusInfo(for plateNumber: String) -> IdentifiableBusInfo? {
+        // Normalize the plate number for comparison
+        let normalizedPlate = plateNumber.uppercased().filter { !$0.isWhitespace }
+        
+        // Find the matching bus info
+        if let busInfo = busInfos.first(where: {
+            $0.plateNumber.uppercased().filter { !$0.isWhitespace } == normalizedPlate
+        }) {
+            // Create an identifiable wrapper for the bus info
+            return IdentifiableBusInfo(id: UUID(), plateNumber: busInfo.plateNumber)
+        }
+        
+        return nil
     }
     
     private func captureAndAnalyze() {
@@ -391,16 +414,17 @@ struct HomeView: View {
     }
     
     // Add a function to reset the tutorial for testing purposes
-    // Add this function at the end of the HomeView struct, before the closing brace
     private func resetTutorial() {
         UserDefaults.standard.set(false, forKey: "hasLaunchedBefore")
         print("Tutorial reset - will show on next app launch")
     }
 }
 
-// Camera view implementation remains the same
-
-// Add the CameraView implementation after the HomeView implementation
+// Create an identifiable wrapper for BusInfo to use with fullScreenCover(item:)
+struct IdentifiableBusInfo: Identifiable {
+    let id: UUID
+    let plateNumber: String
+}
 
 // Camera view using UIViewRepresentable
 struct CameraView: UIViewRepresentable {
@@ -770,4 +794,3 @@ struct CameraView: UIViewRepresentable {
 #Preview {
     HomeView()
 }
-
