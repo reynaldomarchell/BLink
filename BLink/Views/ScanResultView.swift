@@ -17,16 +17,16 @@ struct ScanResultView: View {
     @Query private var busInfos: [BusInfo]
     @Query private var busRoutes: [BusRoute]
     
-    // Find the matching bus info for the scanned plate
+    // Find the matching bus info for the scanned plate with improved matching
     private var matchingBusInfo: BusInfo? {
-        // First try exact matching
-        let exactMatch = busInfos.first { $0.plateNumber == plateNumber }
-        if exactMatch != nil {
-            return exactMatch
-        }
+        // Normalize the input plate number for comparison
+        let normalizedPlate = normalizePlateForComparison(plateNumber)
         
-        // Try case-insensitive matching if exact match fails
-        return busInfos.first { $0.plateNumber.lowercased() == plateNumber.lowercased() }
+        // Try to find a match using normalized comparison
+        return busInfos.first { busInfo in
+            let normalizedBusPlate = normalizePlateForComparison(busInfo.plateNumber)
+            return normalizedPlate == normalizedBusPlate
+        }
     }
     
     // Find the route for the bus
@@ -230,6 +230,7 @@ struct ScanResultView: View {
         .onAppear {
             // Debug print to check what's happening
             print("Scanned plate: \(plateNumber)")
+            print("Normalized plate for comparison: \(normalizePlateForComparison(plateNumber))")
             print("Available bus infos: \(busInfos.count)")
             print("Available bus infos: \(busInfos.map { "\($0.plateNumber): \($0.routeCode)" }.joined(separator: ", "))")
             
@@ -247,6 +248,12 @@ struct ScanResultView: View {
                 }
             }
         }
+    }
+    
+    // Function to normalize plate number for comparison
+    private func normalizePlateForComparison(_ plate: String) -> String {
+        // Remove all spaces and convert to uppercase
+        return plate.uppercased().filter { !$0.isWhitespace }
     }
     
     private func saveBusInfo() {
@@ -286,37 +293,48 @@ struct ScanResultView: View {
             "B 7666 PAA", "B 7966 PAA", "B 7002 PGX"
         ]
         
-        return predefinedPlates.contains { $0.lowercased() == plate.lowercased() }
+        // Normalize the input plate and all predefined plates for comparison
+        let normalizedInput = normalizePlateForComparison(plate)
+        
+        return predefinedPlates.contains { predefinedPlate in
+            normalizedInput == normalizePlateForComparison(predefinedPlate)
+        }
     }
 
     // Add a bus info entry for a predefined plate
     private func addPredefinedBusInfo() {
         // Map of predefined plates to their route info
         let plateToRouteMap: [String: (code: String, name: String)] = [
-            "B 7566 PAA": ("GS", "Greenwich - Sektor 1.3 Loop Line"),
-            "B 7366 JE": ("ID1", "Intermoda - De Park 1"),
-            "B 7366 PAA": ("ID2", "Intermoda - De Park 2"),
-            "B 7666 PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
-            "B 7966 PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
-            "B 7002 PGX": ("EC", "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line")
+            "B7566PAA": ("GS", "Greenwich - Sektor 1.3 Loop Line"),
+            "B7366JE": ("ID1", "Intermoda - De Park 1"),
+            "B7366PAA": ("ID2", "Intermoda - De Park 2"),
+            "B7666PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
+            "B7966PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
+            "B7002PGX": ("EC", "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line")
         ]
         
-        // Find the matching route info (case-insensitive)
-        let matchingPlate = plateToRouteMap.keys.first {
-            $0.lowercased() == plateNumber.lowercased()
+        // Normalize the input plate for comparison
+        let normalizedInput = normalizePlateForComparison(plateNumber)
+        
+        // Find the matching route info using normalized comparison
+        let matchingKey = plateToRouteMap.keys.first { normalizedKey in
+            normalizedInput == normalizedKey
         }
         
-        if let matchingPlate = matchingPlate, let routeInfo = plateToRouteMap[matchingPlate] {
+        if let matchingKey = matchingKey, let routeInfo = plateToRouteMap[matchingKey] {
+            // Format the plate number in a standard way (B 1234 XYZ)
+            let formattedPlate = formatPlateNumber(plateNumber) ?? plateNumber.uppercased()
+            
             // Create and insert the bus info
             let busInfo = BusInfo(
-                plateNumber: matchingPlate, // Use the correctly formatted plate number
+                plateNumber: formattedPlate,
                 routeCode: routeInfo.code,
                 routeName: routeInfo.name
             )
             
             // Check for duplicates one more time before inserting
-            let duplicateCheck = busInfos.first {
-                $0.plateNumber.lowercased() == matchingPlate.lowercased()
+            let duplicateCheck = busInfos.first { busInfo in
+                normalizePlateForComparison(busInfo.plateNumber) == normalizedInput
             }
             
             if duplicateCheck == nil {
@@ -325,7 +343,7 @@ struct ScanResultView: View {
                 // Try to save changes
                 do {
                     try modelContext.save()
-                    print("Added predefined bus info for plate: \(matchingPlate)")
+                    print("Added predefined bus info for plate: \(formattedPlate)")
                 } catch {
                     print("Error adding predefined bus info: \(error.localizedDescription)")
                 }
@@ -333,6 +351,48 @@ struct ScanResultView: View {
                 print("Duplicate check caught a potential duplicate entry")
             }
         }
+    }
+    
+    // Format a plate number in the standard format: B 1234 XYZ
+    private func formatPlateNumber(_ plate: String) -> String? {
+        // Remove spaces and convert to uppercase
+        let cleaned = plate.uppercased().filter { !$0.isWhitespace }
+        
+        // Try to extract components
+        var regionCode = ""
+        var numbers = ""
+        var identifier = ""
+        
+        var index = cleaned.startIndex
+        
+        // Extract region code (first 1-2 letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            regionCode.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract numbers
+        while index < cleaned.endIndex && cleaned[index].isNumber {
+            numbers.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract identifier (remaining letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            identifier.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Format with proper spacing
+        if !regionCode.isEmpty && !numbers.isEmpty {
+            if !identifier.isEmpty {
+                return "\(regionCode) \(numbers) \(identifier)"
+            } else {
+                return "\(regionCode) \(numbers)"
+            }
+        }
+        
+        return nil
     }
     
     private func createTime(hour: Int, minute: Int) -> Date {
@@ -434,5 +494,5 @@ struct StationRow: View {
 
 
 #Preview {
-    ScanResultView(plateNumber: "B 1234 XYZ")
+    ScanResultView(plateNumber: "B 7566 PAA")
 }

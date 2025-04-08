@@ -60,10 +60,10 @@ struct RouteHistoryView: View {
             }
             .navigationBarTitle("Bus History", displayMode: .inline)
             .navigationBarItems(
-                leading: Button("Close") {
+                leading: EditButton(),
+                trailing: Button("Close") {
                     dismiss()
                 },
-                trailing: EditButton()
             )
         }
     }
