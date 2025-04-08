@@ -24,10 +24,18 @@ struct ManualPlateInputView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .padding(.horizontal)
+                    .autocapitalization(.allCharacters) // Auto-capitalize input
+                
+                Text("Examples: B 7366 JE, B7366JE, b 7366 je")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal)
                 
                 Button(action: {
                     if !plateNumber.isEmpty {
-                        onSubmit(plateNumber)
+                        // Normalize the plate number before submitting
+                        let normalizedPlate = normalizePlateNumber(plateNumber)
+                        onSubmit(normalizedPlate)
                     }
                 }) {
                     Text("Submit")
@@ -42,15 +50,60 @@ struct ManualPlateInputView: View {
                 Spacer()
             }
             .padding()
-            .navigationBarTitle("Manual Input", displayMode: .inline)
             .navigationBarItems(trailing: Button("Cancel") {
                 dismiss()
             })
         }
+    }
+    
+    // Function to normalize plate number format
+    private func normalizePlateNumber(_ plate: String) -> String {
+        // Convert to uppercase
+        let uppercased = plate.uppercased()
+        
+        // Extract only alphanumeric characters
+        let alphanumeric = uppercased.filter { $0.isLetter || $0.isNumber }
+        
+        // Try to format as standard Indonesian plate: B 1234 XYZ
+        if alphanumeric.count >= 3 {
+            // Extract the region code (first 1-2 letters)
+            var index = alphanumeric.startIndex
+            var regionCode = ""
+            
+            while index < alphanumeric.endIndex && alphanumeric[index].isLetter {
+                regionCode.append(alphanumeric[index])
+                index = alphanumeric.index(after: index)
+            }
+            
+            // Extract the numbers
+            var numbers = ""
+            while index < alphanumeric.endIndex && alphanumeric[index].isNumber {
+                numbers.append(alphanumeric[index])
+                index = alphanumeric.index(after: index)
+            }
+            
+            // Extract the identifier (remaining letters)
+            var identifier = ""
+            while index < alphanumeric.endIndex && alphanumeric[index].isLetter {
+                identifier.append(alphanumeric[index])
+                index = alphanumeric.index(after: index)
+            }
+            
+            // Format with proper spacing
+            if !regionCode.isEmpty && !numbers.isEmpty {
+                if !identifier.isEmpty {
+                    return "\(regionCode) \(numbers) \(identifier)"
+                } else {
+                    return "\(regionCode) \(numbers)"
+                }
+            }
+        }
+        
+        // If we can't parse it properly, return the original uppercase version
+        return uppercased
     }
 }
 
 #Preview {
     ManualPlateInputView(onSubmit: { _ in })
 }
-
