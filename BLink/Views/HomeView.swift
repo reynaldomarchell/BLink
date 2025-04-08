@@ -50,7 +50,7 @@ struct HomeView: View {
                         .foregroundStyle(.clear)
                         .frame(width: 402, height: 60)
                     HStack {
-                        Text("BLink")
+                        Text("B-Link")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding()
@@ -144,33 +144,32 @@ struct HomeView: View {
                     
                     // White background container for buttons
                     VStack(spacing: 12) {
+                        
+                        // input bus plate option
+                            Button(action: {
+                                isShowingManualInput = true
+                            }) {
+                                Text("Enter Bus Plate Manually")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .frame(width: 330, height: 43)
+                                    .background(Color("BlueColor"))
+                                    .cornerRadius(7)
+                            }
+                        
                         // Search route option
                         Button(action: {
                             showRouteFinderView = true
                         }) {
-                            Text("Search Route")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 330, height: 43)
-                                .background(Color("BlueColor"))
-                                .cornerRadius(7)
+                            Text("Explore Bus Routes")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(Color("Orange"))
+                                .underline()
+                                //.frame(width: 330, height: 43)
+                                //.background(Color("BlueColor"))
+                                //.cornerRadius(7)
                         }
                         
-                        // input bus plate option
-                        HStack {
-                            Text("In a hurry?")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.black)
-                            
-                            Button(action: {
-                                isShowingManualInput = true
-                            }) {
-                                Text("Input the bus plate here")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.orange)
-                                    .underline()
-                            }
-                        }
                     }
                     .padding(.vertical, 20)
                     .padding(.horizontal, 15)
