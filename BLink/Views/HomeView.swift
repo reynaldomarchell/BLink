@@ -50,7 +50,7 @@ struct HomeView: View {
                         .foregroundStyle(.clear)
                         .frame(width: 402, height: 60)
                     HStack {
-                        Text("B-Link")
+                        Text("BLink")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding()
@@ -86,11 +86,11 @@ struct HomeView: View {
                 VStack(spacing: 25) {
                     
                     // Scanning frame - this will be positioned over the camera view
-                    ZStack{
+                    ZStack {
                         Rectangle()
                             .stroke(style: StrokeStyle(lineWidth: 3, dash: [10, 5]))
                             .frame(width: 250, height: 150)
-                            .foregroundColor(.white)
+                            .foregroundColor(isPlateDetected ? .green : .white)
                             .background(Color.clear)
                             .overlay(
                                 GeometryReader { geometry in
@@ -103,7 +103,15 @@ struct HomeView: View {
                                 }
                             )
                         
-                        // No preview text
+                        if isPlateDetected {
+                            Text(detectedPlateText)
+                                .font(.caption)
+                                .padding(4)
+                                .background(Color.black.opacity(0.6))
+                                .foregroundColor(.white)
+                                .cornerRadius(4)
+                                .position(x: 125, y: 130)
+                        }
                     }
                     .frame(width: 250, height: 150)
                     .padding(60)
@@ -581,9 +589,12 @@ struct CameraView: UIViewRepresentable {
                if let results = request.results as? [VNRecognizedTextObservation] {
                    // Process text observations
                    let recognizedStrings = results.compactMap { observation in
-                       // Get multiple candidates to improve chances of finding the plate
-                       observation.topCandidates(5).map { $0.string }
+                       // Get more candidates to improve chances of finding the plate
+                       observation.topCandidates(10).map { $0.string }
                    }.flatMap { $0 }
+                   
+                   // Debug: Print all recognized strings
+                   print("Recognized text candidates: \(recognizedStrings)")
                    
                    var plateDetected = false
                    var plateText = ""
@@ -592,13 +603,19 @@ struct CameraView: UIViewRepresentable {
                    // Format: B 7366 JE (1-2 letters + space + 1-4 digits + space + 1-3 letters)
                    let platePattern = "\\b[A-Z]{1,2}\\s*\\d{1,4}\\s*[A-Z]{1,3}\\b"
                    
+                   // Also try a more lenient pattern that might catch partial plates
+                   let lenientPattern = "[A-Z]{1,2}\\s*\\d{1,4}"
+                   
                    for string in recognizedStrings {
-                       // Clean up the string - remove unwanted characters
-                       let cleanedString = string.replacingOccurrences(of: "BSDCITY", with: "")
-                                          .replacingOccurrences(of: "BSD", with: "")
-                                          .replacingOccurrences(of: "CITY", with: "")
-                                          .trimmingCharacters(in: .whitespacesAndNewlines)
-                 
+                       // Clean up the string - remove unwanted characters and trim
+                       let cleanedString = string
+                           .replacingOccurrences(of: "BSDCITY", with: "")
+                           .replacingOccurrences(of: "BSD", with: "")
+                           .replacingOccurrences(of: "CITY", with: "")
+                           .trimmingCharacters(in: .whitespacesAndNewlines)
+                           .uppercased() // Ensure uppercase for consistent matching
+                       
+                       // Try the full plate pattern first
                        if let regex = try? NSRegularExpression(pattern: platePattern) {
                            let range = NSRange(location: 0, length: cleanedString.utf16.count)
                            if let match = regex.firstMatch(in: cleanedString, range: range) {
@@ -628,29 +645,31 @@ struct CameraView: UIViewRepresentable {
                            }
                        }
                        
-                       // Also try to match just the pattern "B 7366" (letter + space + numbers)
-                       let simplePattern = "\\b[A-Z]\\s*\\d{4}\\b"
-                       if let regex = try? NSRegularExpression(pattern: simplePattern) {
-                           let range = NSRange(location: 0, length: cleanedString.utf16.count)
-                           if let match = regex.firstMatch(in: cleanedString, range: range) {
-                               let matchRange = match.range
-                               if let range = Range(matchRange, in: cleanedString) {
-                                   let candidate = String(cleanedString[range])
-                                   
-                                   // If we find a simple pattern and haven't found a full plate yet
-                                   if !plateDetected {
+                       // If no full plate detected, try the lenient pattern
+                       if !plateDetected {
+                           if let regex = try? NSRegularExpression(pattern: lenientPattern) {
+                               let range = NSRange(location: 0, length: cleanedString.utf16.count)
+                               if let match = regex.firstMatch(in: cleanedString, range: range) {
+                                   let matchRange = match.range
+                                   if let range = Range(matchRange, in: cleanedString) {
+                                       let candidate = String(cleanedString[range])
+                                       
+                                       // If we find a partial plate (like "B 7366")
                                        plateDetected = true
                                        plateText = candidate
                                        
-                                       // Try to find the JE part separately
-                                       let letterPattern = "\\b[A-Z]{2}\\b"
+                                       // Try to find the identifier part separately
+                                       let letterPattern = "\\b[A-Z]{2,3}\\b"
                                        if let letterRegex = try? NSRegularExpression(pattern: letterPattern) {
                                            let letterRange = NSRange(location: 0, length: cleanedString.utf16.count)
-                                           if let letterMatch = letterRegex.firstMatch(in: cleanedString, range: letterRange) {
+                                           let letterMatches = letterRegex.matches(in: cleanedString, range: letterRange)
+                                           
+                                           for letterMatch in letterMatches {
                                                if let letterMatchRange = Range(letterMatch.range, in: cleanedString) {
                                                    let letters = String(cleanedString[letterMatchRange])
-                                                   if letters != "BS" && letters != "SD" {
+                                                   if letters != "BS" && letters != "SD" && !plateText.contains(letters) {
                                                        plateText += " " + letters
+                                                       break
                                                    }
                                                }
                                            }
@@ -674,9 +693,11 @@ struct CameraView: UIViewRepresentable {
                        
                        // Find the plate with the highest confidence
                        if let (mostConfidentPlate, confidence) = self.plateDetectionHistory.max(by: { $0.value < $1.value }) {
-                           if confidence >= self.confidenceThreshold {
+                           // Lower the confidence threshold to 2 (was 3)
+                           if confidence >= 2 {
                                plateDetected = true
                                plateText = mostConfidentPlate
+                               print("Detected plate with confidence \(confidence): \(plateText)")
                            } else {
                                plateDetected = false
                            }
@@ -693,11 +714,12 @@ struct CameraView: UIViewRepresentable {
                        self.plateDetectionHistory = self.plateDetectionHistory.filter { $0.value > 0 }
                    }
                    
-                   // Store the detected plate text for capture button use, but don't update UI
+                   // Store the detected plate text for capture button use
                    DispatchQueue.main.async {
                        if plateDetected {
                            self.parent.detectedPlateText = plateText
                            self.parent.isPlateDetected = true
+                           print("✅ Plate detected: \(plateText)")
                        } else {
                            self.parent.isPlateDetected = false
                        }
@@ -710,8 +732,14 @@ struct CameraView: UIViewRepresentable {
            request.usesLanguageCorrection = false
            request.revision = 3
            
-           // Set the region of interest to the scan frame with a tighter boundary
-           request.regionOfInterest = normalizedRect
+           // Use a slightly larger region of interest to catch more text
+           let expandedRect = CGRect(
+               x: max(0, normalizedRect.origin.x - 0.05),
+               y: max(0, normalizedRect.origin.y - 0.05),
+               width: min(1.0, normalizedRect.width + 0.1),
+               height: min(1.0, normalizedRect.height + 0.1)
+           )
+           request.regionOfInterest = expandedRect
            
            // Create a handler to perform the request
            let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])

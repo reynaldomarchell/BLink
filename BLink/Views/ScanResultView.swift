@@ -252,8 +252,12 @@ struct ScanResultView: View {
     
     // Function to normalize plate number for comparison
     private func normalizePlateForComparison(_ plate: String) -> String {
-        // Remove all spaces and convert to uppercase
-        return plate.uppercased().filter { !$0.isWhitespace }
+        // Remove all spaces, punctuation, and convert to uppercase
+        let normalized = plate.uppercased()
+            .filter { $0.isLetter || $0.isNumber }
+        
+        print("Normalized plate: \(normalized) from original: \(plate)")
+        return normalized
     }
     
     private func saveBusInfo() {
@@ -296,9 +300,23 @@ struct ScanResultView: View {
         // Normalize the input plate and all predefined plates for comparison
         let normalizedInput = normalizePlateForComparison(plate)
         
-        return predefinedPlates.contains { predefinedPlate in
-            normalizedInput == normalizePlateForComparison(predefinedPlate)
+        let result = predefinedPlates.contains { predefinedPlate in
+            let normalizedPredefined = normalizePlateForComparison(predefinedPlate)
+            let matches = normalizedInput == normalizedPredefined
+            
+            // Debug output
+            if matches {
+                print("✅ Matched plate \(plate) with predefined \(predefinedPlate)")
+            }
+            
+            return matches
         }
+        
+        if !result {
+            print("❌ No match found for plate: \(plate)")
+        }
+        
+        return result
     }
 
     // Add a bus info entry for a predefined plate

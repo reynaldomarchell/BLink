@@ -73,6 +73,7 @@ struct ManualPlateInputView: View {
             while index < alphanumeric.endIndex && alphanumeric[index].isLetter {
                 regionCode.append(alphanumeric[index])
                 index = alphanumeric.index(after: index)
+                if regionCode.count >= 2 { break } // Maximum 2 letters for region code
             }
             
             // Extract the numbers
@@ -80,6 +81,7 @@ struct ManualPlateInputView: View {
             while index < alphanumeric.endIndex && alphanumeric[index].isNumber {
                 numbers.append(alphanumeric[index])
                 index = alphanumeric.index(after: index)
+                if numbers.count >= 4 { break } // Maximum 4 digits for numbers
             }
             
             // Extract the identifier (remaining letters)
@@ -87,6 +89,7 @@ struct ManualPlateInputView: View {
             while index < alphanumeric.endIndex && alphanumeric[index].isLetter {
                 identifier.append(alphanumeric[index])
                 index = alphanumeric.index(after: index)
+                if identifier.count >= 3 { break } // Maximum 3 letters for identifier
             }
             
             // Format with proper spacing
