@@ -12,7 +12,14 @@ struct SplashView: View {
     
     var body: some View {
         if isActive {
-            TutorialView()
+            // Check if this is the first launch
+            if UserDefaults.standard.bool(forKey: "hasLaunchedBefore") {
+                // Not first launch, go directly to HomeView
+                HomeView()
+            } else {
+                // First launch, show tutorial
+                TutorialView()
+            }
         } else {
             VStack(spacing: 10) {
                 Image("AppLogo")
@@ -35,4 +42,3 @@ struct SplashView: View {
 #Preview {
     SplashView()
 }
-

@@ -113,7 +113,9 @@ struct TutorialContent: View {
             Spacer()
             
             Button(action: {
-                //Buat loop ke home cuy :D - Danke Will
+                // Set flag indicating the app has been launched before
+                UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
+                // Navigate to home
                 isPresented.toggle()
             }) {
                 Text("Continue")
@@ -135,4 +137,3 @@ struct TutorialContent: View {
 #Preview {
     TutorialView()
 }
-

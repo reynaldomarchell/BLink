@@ -71,9 +71,10 @@ struct HomeView: View {
                         // Tutorial button
                         Button(action: {
                             showTutorial = true
+                            // Uncomment the line below if you want the button to also reset the tutorial flag
+                            // resetTutorial()
                         }) {
                             Image(systemName: "questionmark")
-                                //.font(.title3)
                                 .foregroundColor(.black)
                                 .padding(8)
                                 .background(Circle().fill(Color.white))
@@ -388,6 +389,13 @@ struct HomeView: View {
         }
         
         return nil
+    }
+    
+    // Add a function to reset the tutorial for testing purposes
+    // Add this function at the end of the HomeView struct, before the closing brace
+    private func resetTutorial() {
+        UserDefaults.standard.set(false, forKey: "hasLaunchedBefore")
+        print("Tutorial reset - will show on next app launch")
     }
 }
 
