@@ -209,10 +209,13 @@ struct HomeView: View {
             RouteFinderView()
         }
         .sheet(isPresented: $isShowingManualInput) {
-            ManualPlateInputView(onSubmit: { plate in
-                recognizedPlate = plate
-                isShowingManualInput = false
-                showScanResult = true
+            ManualPlateInputView(onSelectBus: { plateNumber in
+                // Find the bus info for this plate number
+                if let busInfo = findBusInfo(for: plateNumber) {
+                    // Set the selected bus and close the manual input view
+                    selectedBusFromManual = busInfo
+                    isShowingManualInput = false
+                }
             })
         }
         .fullScreenCover(isPresented: $showTutorial) {
@@ -240,10 +243,17 @@ struct HomeView: View {
                 }
             })
         }
+        .fullScreenCover(item: $selectedBusFromManual) { busInfo in
+            // Use a fullScreenCover with an identifiable item for better state management
+            ScanResultView(plateNumber: busInfo.plateNumber)
+        }
     }
     
     // Add a new state variable to track the selected bus from history
     @State private var selectedBusForScan: IdentifiableBusInfo?
+    
+    // Add a new state variable to track the selected bus from manual input
+    @State private var selectedBusFromManual: IdentifiableBusInfo?
     
     // Helper function to find bus info for a plate number
     private func findBusInfo(for plateNumber: String) -> IdentifiableBusInfo? {
