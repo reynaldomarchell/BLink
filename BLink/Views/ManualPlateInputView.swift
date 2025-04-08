@@ -29,7 +29,7 @@ struct ManualPlateInputView: View {
                         Text(busInfo.plateNumber).tag(busInfo.plateNumber)
                     }
                 }
-                .pickerStyle(.automatic) // You can change this to .menu if preferred
+                .pickerStyle(.wheel) // You can change this to .menu if preferred
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
