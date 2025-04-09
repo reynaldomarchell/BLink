@@ -141,7 +141,7 @@ struct ScanResultView: View {
                     ScrollView {
                         VStack(spacing: 0) {
                             ForEach(Array(stations.enumerated()), id: \.offset) { index, station in
-                                StationRow(station: station, isLast: index == stations.count - 1)
+                                StationRow(station: station, isLast: index == stations.count - 1, routeColor: colorFromString(routeInfo.color))
                             }
                         }
                         .padding()
@@ -456,7 +456,7 @@ struct ScanResultView: View {
         case "darkgreen": return Color(red: 154/255, green: 205/255, blue: 50/255)
         case "navy": return Color(red: 0/255, green: 0/255, blue: 128/255)
         case "red": return .red
-        case "black": return .black
+        case "black": return Color(red: 128/255, green: 128/255, blue: 128/255) // Changed from black to gray for better visibility in dark mode
         default: return .gray
         }
     }
@@ -476,6 +476,7 @@ struct ScanResultView: View {
 struct StationRow: View {
     let station: Station
     let isLast: Bool
+    let routeColor: Color
     
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
@@ -487,32 +488,32 @@ struct StationRow: View {
                 
                 if !isLast {
                     Rectangle()
-                        .fill(Color.purple)
+                        .fill(routeColor)
                         .frame(width: 3)
                         .frame(height: 40)
                 }
             }
             
             // Station info
-//            VStack(alignment: .leading, spacing: 2) {
-//                if station.isPreviousStation {
-//                    Text("Previous station")
-//                        .font(.caption)
-//                        .foregroundColor(.secondary)
-//                } else if station.isCurrentStation {
-//                    Text("Current station")
-//                        .font(.caption)
-//                        .foregroundColor(.secondary)
-//                } else if station.isNextStation {
-//                    Text("Next station")
-//                        .font(.caption)
-//                        .foregroundColor(.secondary)
-//                }
-//                
-//                Text(station.name)
-//                    .font(.headline)
-//            }
-//            .padding(.vertical, 5)
+            VStack(alignment: .leading, spacing: 2) {
+                if station.isPreviousStation {
+                    Text("Previous station")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                } else if station.isCurrentStation {
+                    Text("Current station")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                } else if station.isNextStation {
+                    Text("Next station")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Text(station.name)
+                    .font(.headline)
+            }
+            .padding(.vertical, 5)
             
             Spacer()
             
@@ -528,13 +529,13 @@ struct StationRow: View {
     
     private var stationColor: Color {
         if station.isPreviousStation {
-            return .purple.opacity(0.5)
+            return routeColor.opacity(0.5)
         } else if station.isCurrentStation {
-            return .purple
+            return routeColor
         } else if station.isNextStation {
-            return .purple
+            return routeColor
         } else {
-            return .purple
+            return routeColor
         }
     }
     

@@ -104,7 +104,7 @@ class DataSeeder {
                 Station(name: "Halte Sektor 1.3", isCurrentStation: false, isPreviousStation: false, isNextStation: false)
             ],
             routeCode: "IS",
-            color: "black",
+            color: "teal", // Changed from "black" to "teal" for better visibility in dark mode
             estimatedTime: 69,
             distance: 6.9,
             routeDescription: "Intermoda - Sektor 1.3 Loop Line"
@@ -440,4 +440,3 @@ class DataSeeder {
         )
     }
 }
-

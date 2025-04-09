@@ -164,6 +164,8 @@ struct RouteCodeBadge: View {
             return Color(red: 219/255, green: 112/255, blue: 147/255)
         case "IV":
             return Color(red: 154/255, green: 205/255, blue: 50/255)
+        case "IS":
+            return Color(red: 0/255, green: 128/255, blue: 128/255) // Added teal color for IS route
         default:
             return .blue
         }

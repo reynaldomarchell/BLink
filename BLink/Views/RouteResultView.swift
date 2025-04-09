@@ -327,85 +327,87 @@ struct ZoomableScrollView<Content: View>: View {
 
 // More compact route card for smaller screens
 struct CompactRouteCard: View {
-  let from: String
-  let to: String
-  let routeCode: String
-  let duration: Int
-  let distance: Double
-  let routeDescription: String
-  
-  var body: some View {
-      VStack(alignment: .leading, spacing: 8) {
-          // Route title
-          HStack {
-              Text(from)
-                  .foregroundColor(.blue)
-              
-              Image(systemName: "arrow.right")
-                  .foregroundColor(.secondary)
-                  .font(.caption)
-              
-              Text(to)
-                  .foregroundColor(.blue)
-          }
-          .font(.subheadline)
-          
-          // Route details
-          HStack {
-              ZStack {
-                  Capsule()
-                      .fill(routeCodeColor.opacity(0.2))
-                      .frame(width: 32, height: 22)
-                  
-                  Text(routeCode)
-                      .font(.caption2)
-                      .fontWeight(.bold)
-                      .foregroundColor(routeCodeColor)
-              }
-              
-              Text(routeDescription)
-                  .font(.caption)
-                  .foregroundColor(.secondary)
-                  .lineLimit(1)
-          }
-          
-          // Duration and distance
-          HStack(spacing: 16) {
-              Label("\(duration) Minutes", systemImage: "clock")
-                  .font(.caption)
-                  .foregroundColor(.secondary)
-              
-              Label("\(String(format: "%.1f", distance)) Km", systemImage: "figure.walk")
-                  .font(.caption)
-                  .foregroundColor(.secondary)
-          }
-      }
-      .padding(12)
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .background(Color(.systemBackground))
-      .cornerRadius(12)
-      .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
-  }
-  
-  // Get color based on route code
-  private var routeCodeColor: Color {
-      switch routeCode {
-      case "BC":
-          return .purple
-      case "GS":
-          return .green
-      case "AS":
-          return Color(red: 34/255, green: 139/255, blue: 34/255)
-      case "ID1":
-          return Color(red: 64/255, green: 224/255, blue: 208/255)
-      case "ID2":
-          return Color(red: 219/255, green: 112/255, blue: 147/255)
-      case "IV":
-          return Color(red: 154/255, green: 205/255, blue: 50/255)
-      default:
-          return .blue
-      }
-  }
+    let from: String
+    let to: String
+    let routeCode: String
+    let duration: Int
+    let distance: Double
+    let routeDescription: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Route title
+            HStack {
+                Text(from)
+                    .foregroundColor(.blue)
+                
+                Image(systemName: "arrow.right")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+                
+                Text(to)
+                    .foregroundColor(.blue)
+            }
+            .font(.subheadline)
+            
+            // Route details
+            HStack {
+                ZStack {
+                    Capsule()
+                        .fill(routeCodeColor.opacity(0.2))
+                        .frame(width: 32, height: 22)
+                    
+                    Text(routeCode)
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .foregroundColor(routeCodeColor)
+                }
+                
+                Text(routeDescription)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+            }
+            
+            // Duration and distance
+            HStack(spacing: 16) {
+                Label("\(duration) Minutes", systemImage: "clock")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Label("\(String(format: "%.1f", distance)) Km", systemImage: "figure.walk")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+    }
+    
+    // Get color based on route code
+    private var routeCodeColor: Color {
+        switch routeCode {
+        case "BC":
+            return .purple
+        case "GS":
+            return .green
+        case "AS":
+            return Color(red: 34/255, green: 139/255, blue: 34/255)
+        case "ID1":
+            return Color(red: 64/255, green: 224/255, blue: 208/255)
+        case "ID2":
+            return Color(red: 219/255, green: 112/255, blue: 147/255)
+        case "IV":
+            return Color(red: 154/255, green: 205/255, blue: 50/255)
+        case "IS":
+            return Color(red: 0/255, green: 128/255, blue: 128/255) // Added teal color for IS route
+        default:
+            return .blue
+        }
+    }
 }
 
 #Preview {
@@ -431,4 +433,3 @@ struct CompactRouteCard: View {
   
   return RouteResultView(route: sampleRoute)
 }
-
