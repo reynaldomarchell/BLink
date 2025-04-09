@@ -29,11 +29,13 @@ struct TutorialContent: View {
                 .fontWeight(.semibold)
                 .frame(alignment: .bottom)
                 .foregroundColor(.black)
+                .fixedSize(horizontal: false, vertical: true)
             Text("BLink Bus Scanner")
                 .font(.largeTitle)
+                .foregroundColor(Color("BlueColor"))
                 .padding(.bottom, 18)
                 .fontWeight(.semibold)
-                .foregroundColor(Color(red: 237/255, green: 100/255, blue: 0/255))
+                .fixedSize(horizontal: false, vertical: true)
             HStack(alignment: .center, spacing: 16) {
                 Text("1")
                     .font(.system(size: 32, weight: .medium)) // Large step number
@@ -45,10 +47,12 @@ struct TutorialContent: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Text("Point your camera to the bus plate number")
                         .font(.body)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.trailing, 16)
                 
@@ -70,10 +74,12 @@ struct TutorialContent: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Text("This will let us scan the bus plate number")
                         .font(.body)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.trailing, 16)
                 
@@ -95,10 +101,12 @@ struct TutorialContent: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Text("You can see the schedule and the route of the bus here!")
                         .font(.body)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                 }
                 .padding(.trailing, 16)
@@ -113,7 +121,9 @@ struct TutorialContent: View {
             Spacer()
             
             Button(action: {
-                //Buat loop ke home cuy :D - Danke Will
+                // Set flag indicating the app has been launched before
+                UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
+                // Navigate to home
                 isPresented.toggle()
             }) {
                 Text("Continue")
@@ -121,7 +131,7 @@ struct TutorialContent: View {
                     .padding()
                     .frame(width: 120, height: 45)
                     .foregroundColor(.white)
-                    .background(Color(red: 0/255, green: 74/255, blue: 173/255))
+                    .background(Color("BlueColor"))
                     .cornerRadius(10)
             }
             Spacer()
@@ -135,4 +145,3 @@ struct TutorialContent: View {
 #Preview {
     TutorialView()
 }
-

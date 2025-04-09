@@ -88,7 +88,7 @@ struct RouteFinderView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
 
-                                TextField(locationManager.currentAddress.isEmpty ? "Current Location" : locationManager.currentAddress, text: $customLocation)
+                                TextField("Enter your location", text: $customLocation)
                                     .font(.subheadline)
                                     .foregroundColor(.primary)
                             }
@@ -102,8 +102,7 @@ struct RouteFinderView: View {
                             } else {
                                 Button(action: {
                                     // Swap location and destination
-                                    let tempLocation = customLocation.isEmpty ?
-                                        locationManager.currentAddress : customLocation
+                                    let tempLocation = customLocation
                                     customLocation = destination
                                     destination = tempLocation
                                 }) {
@@ -132,8 +131,9 @@ struct RouteFinderView: View {
                 // Recommendations section with history button
                 HStack {
                     Text("Recommendations")
-                        .font(.title2)
+                        .font(.title3)
                         .fontWeight(.bold)
+                        .padding(.leading)
                     Spacer()
                     
                     Button(action: {
@@ -387,6 +387,8 @@ struct RouteRecommendationCard: View {
            return Color(red: 219/255, green: 112/255, blue: 147/255)
        case "IV":
            return Color(red: 154/255, green: 205/255, blue: 50/255)
+       case "IS":
+           return Color(red: 0/255, green: 128/255, blue: 128/255) // Added teal color for IS route
        default:
            return .blue
        }
@@ -396,4 +398,3 @@ struct RouteRecommendationCard: View {
 #Preview {
    RouteFinderView()
 }
-

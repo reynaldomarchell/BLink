@@ -10,6 +10,7 @@ import SwiftData
 
 struct RouteHistoryView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \BusInfo.lastSeen, order: .reverse) private var recentBuses: [BusInfo]
     
     var onSelectBus: (String) -> Void
@@ -30,7 +31,7 @@ struct RouteHistoryView: View {
                             }) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text(busInfo.plateNumber)
+                                        Text(formatPlateForDisplay(busInfo.plateNumber))
                                             .font(.headline)
                                         
                                         HStack {
@@ -53,13 +54,17 @@ struct RouteHistoryView: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
+                        .onDelete(perform: deleteBusInfo)
                     }
                 }
             }
             .navigationBarTitle("Bus History", displayMode: .inline)
-            .navigationBarItems(leading: Button("Close") {
-                dismiss()
-            })
+            .navigationBarItems(
+                leading: EditButton(),
+                trailing: Button("Close") {
+                    dismiss()
+                },
+            )
         }
     }
     
@@ -67,6 +72,67 @@ struct RouteHistoryView: View {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
         return formatter.localizedString(for: date, relativeTo: Date())
+    }
+    
+    private func deleteBusInfo(at offsets: IndexSet) {
+        for index in offsets {
+            let busInfo = recentBuses[index]
+            modelContext.delete(busInfo)
+        }
+        
+        // Try to save changes
+        do {
+            try modelContext.save()
+            print("Successfully deleted bus info")
+        } catch {
+            print("Error deleting bus info: \(error.localizedDescription)")
+        }
+    }
+    
+    private func formatPlateForDisplay(_ plate: String) -> String {
+        // If the plate already has spaces, return it as is
+        if plate.contains(" ") {
+            return plate
+        }
+        
+        // Otherwise, try to format it with spaces
+        let cleaned = plate.uppercased()
+        
+        // Try to extract components
+        var regionCode = ""
+        var numbers = ""
+        var identifier = ""
+        
+        var index = cleaned.startIndex
+        
+        // Extract region code (first 1-2 letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            regionCode.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract numbers
+        while index < cleaned.endIndex && cleaned[index].isNumber {
+            numbers.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract identifier (remaining letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            identifier.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Format with proper spacing
+        if !regionCode.isEmpty && !numbers.isEmpty {
+            if !identifier.isEmpty {
+                return "\(regionCode) \(numbers) \(identifier)"
+            } else {
+                return "\(regionCode) \(numbers)"
+            }
+        }
+        
+        return plate
     }
 }
 
@@ -98,6 +164,8 @@ struct RouteCodeBadge: View {
             return Color(red: 219/255, green: 112/255, blue: 147/255)
         case "IV":
             return Color(red: 154/255, green: 205/255, blue: 50/255)
+        case "IS":
+            return Color(red: 0/255, green: 128/255, blue: 128/255) // Added teal color for IS route
         default:
             return .blue
         }
@@ -107,4 +175,3 @@ struct RouteCodeBadge: View {
 #Preview {
     RouteHistoryView(onSelectBus: { _ in })
 }
-
