@@ -322,19 +322,19 @@ class DataSeeder {
     
 
     let busInfos = [
-        BusInfo(plateNumber: "B 7566 PAA", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
-        BusInfo(plateNumber: "B 7366 JE", routeCode: "ID1", routeName: "Intermoda - De Park 1"),
-        BusInfo(plateNumber: "B 7366 PAA", routeCode: "ID2", routeName: "Intermoda - De Park 2"),
-        BusInfo(plateNumber: "B 7666 PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
-        BusInfo(plateNumber: "B 7966 PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
-        BusInfo(plateNumber: "B 7002 PGX", routeCode: "EC", routeName: "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line"),
-        // Nggak perlu, string matching udah auto remove space
-//        BusInfo(plateNumber: "B7566PAA", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
-//        BusInfo(plateNumber: "B7366JE", routeCode: "ID1", routeName: "Intermoda - De Park 1"),
-//        BusInfo(plateNumber: "B7366PAA", routeCode: "ID2", routeName: "Intermoda - De Park 2"),
-//        BusInfo(plateNumber: "B7666PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
-//        BusInfo(plateNumber: "B7966PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
-//        BusInfo(plateNumber: "B7002PGX", routeCode: "EC", routeName: "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line"),
+        BusInfo(plateNumber: "B7566PAA", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
+        BusInfo(plateNumber: "B7266JF", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
+        BusInfo(plateNumber: "B7466PAA", routeCode: "GS", routeName: "Greenwich - Sektor 1.3 Loop Line"),
+        BusInfo(plateNumber: "B7366JE", routeCode: "ID1", routeName: "Intermoda - De Park 1"),
+        BusInfo(plateNumber: "B7366PAA", routeCode: "ID2", routeName: "Intermoda - De Park 2"),
+        BusInfo(plateNumber: "B7866PAA", routeCode: "ID2", routeName: "Intermoda - De Park 2"),
+        BusInfo(plateNumber: "B7666PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
+        BusInfo(plateNumber: "B7966PAA", routeCode: "IS", routeName: "Intermoda - Halte Sektor 1.3"),
+        BusInfo(plateNumber: "B7002PGX", routeCode: "EC", routeName: "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line"),
+        BusInfo(plateNumber: "B7166PAA", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"),
+        BusInfo(plateNumber: "B7866PAA", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"),
+        BusInfo(plateNumber: "B7766PAA", routeCode: "IV", routeName: "Intermoda - Vanya"),
+        
     ]
     
     // Insert data into the model context
