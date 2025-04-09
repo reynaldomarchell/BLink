@@ -148,10 +148,11 @@ struct ScanResultView: View {
                         .foregroundColor(.orange)
                         .padding(.top, 30)
                     
-                    Text("Plate Number Not Recognized")
-                        .font(.title2)
+                    Text("Plate Number \nNot Recognized")
+                        .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
+                        .multilineTextAlignment(.center)
                     
                     Text("This bus plate is not in our database. Please make sure you've correctly positioned the camera and try again.")
                         .font(.body)
@@ -170,9 +171,10 @@ struct ScanResultView: View {
                             Image(systemName: "1.circle.fill")
                                 .foregroundColor(.blue)
                             
-                            Text("Make sure the plate is clearly visible and well-lit")
+                            Text("This bus plate is not in our database. Please make sure you've correctly positioned the camera and try again.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                             
                             Spacer()
                         }
@@ -185,6 +187,7 @@ struct ScanResultView: View {
                             Text("Avoid scanning when the bus is moving")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                             
                             Spacer()
                         }
@@ -194,9 +197,10 @@ struct ScanResultView: View {
                             Image(systemName: "3.circle.fill")
                                 .foregroundColor(.blue)
                             
-                            Text("Position the plate within the scanning frame")
+                            Text("Position the plate within \nthe scanning frame")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                             
                             Spacer()
                         }
@@ -459,25 +463,25 @@ struct StationRow: View {
             }
             
             // Station info
-            VStack(alignment: .leading, spacing: 2) {
-                if station.isPreviousStation {
-                    Text("Previous station")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                } else if station.isCurrentStation {
-                    Text("Current station")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                } else if station.isNextStation {
-                    Text("Next station")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Text(station.name)
-                    .font(.headline)
-            }
-            .padding(.vertical, 5)
+//            VStack(alignment: .leading, spacing: 2) {
+//                if station.isPreviousStation {
+//                    Text("Previous station")
+//                        .font(.caption)
+//                        .foregroundColor(.secondary)
+//                } else if station.isCurrentStation {
+//                    Text("Current station")
+//                        .font(.caption)
+//                        .foregroundColor(.secondary)
+//                } else if station.isNextStation {
+//                    Text("Next station")
+//                        .font(.caption)
+//                        .foregroundColor(.secondary)
+//                }
+//                
+//                Text(station.name)
+//                    .font(.headline)
+//            }
+//            .padding(.vertical, 5)
             
             Spacer()
             
