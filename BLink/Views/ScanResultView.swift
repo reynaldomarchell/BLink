@@ -153,12 +153,14 @@ struct ScanResultView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                         .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     Text("This bus plate is not in our database. Please make sure you've correctly positioned the camera and try again.")
                         .font(.body)
                         .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 30)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     VStack(spacing: 15) {
                         Text("Tips:")
@@ -171,7 +173,7 @@ struct ScanResultView: View {
                             Image(systemName: "1.circle.fill")
                                 .foregroundColor(.blue)
                             
-                            Text("This bus plate is not in our database. Please make sure you've correctly positioned the camera and try again.")
+                            Text("Make sure the plate is clearly visible and well-lit")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
