@@ -128,14 +128,6 @@ struct HomeView: View {
                     .frame(width: 250, height: 150)
                     .padding(60)
                     
-                    //scanning instruction
-                    Text("Place the bus plate number\ninside the box and snap")
-                        .font(.system(size: 15, weight: .medium))
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
-                        .padding(11)
-                        .background(Color.gray.opacity(0.3))
-                        .cornerRadius(10)
                     
                     // Capture button
                     Button(action: {
@@ -160,26 +152,33 @@ struct HomeView: View {
                     }
                     .disabled(isProcessing)
                     
-                    // White background container for buttons
-                    VStack(spacing: 12) {
-                        
+                    //scanning instruction
+                    Text("Place the bus plate number\ninside the box and snap")
+                        .font(.system(size: 15, weight: .medium))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.white)
+                        .padding(11)
+                        .background(Color.gray.opacity(0.3))
+                        .cornerRadius(10)
+                    
+                    
                         // input bus plate option
                         Button(action: {
                             isShowingManualInput = true
                         }) {
                             Text("Enter Bus Plate Manually")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 330, height: 43)
-                                .background(Color("BlueColor"))
-                                .cornerRadius(7)
+                                .font(.system(size: 18))
+                                .foregroundColor(Color("BlueColor"))
+                                .underline()
+                                //.frame(width: 330, height: 43)
+                                //.background(Color("BlueColor"))
+                                //.cornerRadius(7)
                         }
-                        
-                    }
-                    .padding(.vertical, 20)
-                    .padding(.horizontal, 15)
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 30)
+                    
+                    //.padding(.vertical, 20)
+                    //.padding(.horizontal, 15)
+                    //.padding(.horizontal, 20)
+                    .padding(.bottom, 80)
                 }
             }
         }
