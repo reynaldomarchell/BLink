@@ -31,7 +31,7 @@ struct RouteHistoryView: View {
                             }) {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text(busInfo.plateNumber)
+                                        Text(formatPlateForDisplay(busInfo.plateNumber))
                                             .font(.headline)
                                         
                                         HStack {
@@ -63,7 +63,7 @@ struct RouteHistoryView: View {
                 leading: EditButton(),
                 trailing: Button("Close") {
                     dismiss()
-                }
+                },
             )
         }
     }
@@ -87,6 +87,52 @@ struct RouteHistoryView: View {
         } catch {
             print("Error deleting bus info: \(error.localizedDescription)")
         }
+    }
+    
+    private func formatPlateForDisplay(_ plate: String) -> String {
+        // If the plate already has spaces, return it as is
+        if plate.contains(" ") {
+            return plate
+        }
+        
+        // Otherwise, try to format it with spaces
+        let cleaned = plate.uppercased()
+        
+        // Try to extract components
+        var regionCode = ""
+        var numbers = ""
+        var identifier = ""
+        
+        var index = cleaned.startIndex
+        
+        // Extract region code (first 1-2 letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            regionCode.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract numbers
+        while index < cleaned.endIndex && cleaned[index].isNumber {
+            numbers.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract identifier (remaining letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            identifier.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Format with proper spacing
+        if !regionCode.isEmpty && !numbers.isEmpty {
+            if !identifier.isEmpty {
+                return "\(regionCode) \(numbers) \(identifier)"
+            } else {
+                return "\(regionCode) \(numbers)"
+            }
+        }
+        
+        return plate
     }
 }
 

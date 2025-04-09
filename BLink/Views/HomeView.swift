@@ -257,16 +257,27 @@ struct HomeView: View {
     // Helper function to find bus info for a plate number
     private func findBusInfo(for plateNumber: String) -> IdentifiableBusInfo? {
         // Normalize the plate number for comparison
-        let normalizedPlate = plateNumber.uppercased().filter { !$0.isWhitespace }
+        let normalizedPlate = plateNumber.uppercased().filter { $0.isLetter || $0.isNumber }
+        
+        print("Looking for bus info with plate: \(plateNumber)")
+        print("Normalized plate: \(normalizedPlate)")
         
         // Find the matching bus info
         if let busInfo = busInfos.first(where: {
-            $0.plateNumber.uppercased().filter { !$0.isWhitespace } == normalizedPlate
+            let normalizedBusPlate = $0.plateNumber.uppercased().filter { $0.isLetter || $0.isNumber }
+            let matches = normalizedPlate == normalizedBusPlate
+            
+            if matches {
+                print("✅ Found match: \(plateNumber) with \($0.plateNumber)")
+            }
+            
+            return matches
         }) {
             // Create an identifiable wrapper for the bus info
             return IdentifiableBusInfo(id: UUID(), plateNumber: busInfo.plateNumber)
         }
         
+        print("❌ No match found for plate: \(plateNumber)")
         return nil
     }
     
@@ -757,35 +768,43 @@ struct CameraView: UIViewRepresentable {
         // Helper function to format plate numbers consistently
         private func formatPlateNumber(_ plateText: String) -> String? {
             // Try to extract the components of the plate number
-            let components = plateText.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
+            let cleaned = plateText.uppercased().filter { !$0.isWhitespace }
             
-            // Check if we have enough components
-            if components.count >= 2 {
-                // First component should be a letter (region code)
-                let regionCode = components[0]
-                
-                // Second component should be numbers
-                let numbers = components[1]
-                
-                // Third component (if exists) should be letters
-                var identifier = ""
-                if components.count >= 3 {
-                    identifier = components[2]
-                }
-                
-                // If we have all three parts, format as "B 7366 JE"
-                if !regionCode.isEmpty && !numbers.isEmpty && !identifier.isEmpty {
+            // Try to extract components
+            var regionCode = ""
+            var numbers = ""
+            var identifier = ""
+            
+            var index = cleaned.startIndex
+            
+            // Extract region code (first 1-2 letters)
+            while index < cleaned.endIndex && cleaned[index].isLetter {
+                regionCode.append(cleaned[index])
+                index = cleaned.index(after: index)
+            }
+            
+            // Extract numbers
+            while index < cleaned.endIndex && cleaned[index].isNumber {
+                numbers.append(cleaned[index])
+                index = cleaned.index(after: index)
+            }
+            
+            // Extract identifier (remaining letters)
+            while index < cleaned.endIndex && cleaned[index].isLetter {
+                identifier.append(cleaned[index])
+                index = cleaned.index(after: index)
+            }
+            
+            // Format with proper spacing
+            if !regionCode.isEmpty && !numbers.isEmpty {
+                if !identifier.isEmpty {
                     return "\(regionCode) \(numbers) \(identifier)"
-                }
-                
-                // If we only have region and numbers, format as "B 7366"
-                if !regionCode.isEmpty && !numbers.isEmpty {
+                } else {
                     return "\(regionCode) \(numbers)"
                 }
             }
             
-            // If we couldn't parse it properly, return the original
-            return nil
+            return plateText
         }
         
         // Convert UI coordinates to normalized coordinates for Vision framework

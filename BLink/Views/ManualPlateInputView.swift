@@ -21,12 +21,12 @@ struct ManualPlateInputView: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
-                
+            
                 // Use a wheel picker for bus plates
                 Picker("Bus Plate Number", selection: $plateNumber) {
                     Text("Select a plate").tag("")
                     ForEach(busInfos, id: \.plateNumber) { busInfo in
-                        Text(busInfo.plateNumber).tag(busInfo.plateNumber)
+                        Text(formatPlateForDisplay(busInfo.plateNumber)).tag(busInfo.plateNumber)
                     }
                 }
                 .pickerStyle(.wheel)
@@ -34,7 +34,7 @@ struct ManualPlateInputView: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
                 .padding(.horizontal)
-                
+            
                 Button(action: {
                     if !plateNumber.isEmpty {
                         // Call the callback with the selected plate
@@ -49,7 +49,7 @@ struct ManualPlateInputView: View {
                         .cornerRadius(10)
                 }
                 .disabled(plateNumber.isEmpty)
-                
+            
                 Spacer()
             }
             .padding()
@@ -57,6 +57,57 @@ struct ManualPlateInputView: View {
                 dismiss()
             })
         }
+        .onAppear {
+            // Debug print to check available bus infos
+            print("Available bus plates in picker: \(busInfos.map { $0.plateNumber }.joined(separator: ", "))")
+        }
+    }
+    
+    // Add the formatPlateForDisplay function
+    private func formatPlateForDisplay(_ plate: String) -> String {
+        // If the plate already has spaces, return it as is
+        if plate.contains(" ") {
+            return plate
+        }
+        
+        // Otherwise, try to format it with spaces
+        let cleaned = plate.uppercased()
+        
+        // Try to extract components
+        var regionCode = ""
+        var numbers = ""
+        var identifier = ""
+        
+        var index = cleaned.startIndex
+        
+        // Extract region code (first 1-2 letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            regionCode.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract numbers
+        while index < cleaned.endIndex && cleaned[index].isNumber {
+            numbers.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Extract identifier (remaining letters)
+        while index < cleaned.endIndex && cleaned[index].isLetter {
+            identifier.append(cleaned[index])
+            index = cleaned.index(after: index)
+        }
+        
+        // Format with proper spacing
+        if !regionCode.isEmpty && !numbers.isEmpty {
+            if !identifier.isEmpty {
+                return "\(regionCode) \(numbers) \(identifier)"
+            } else {
+                return "\(regionCode) \(numbers)"
+            }
+        }
+        
+        return plate
     }
 }
 

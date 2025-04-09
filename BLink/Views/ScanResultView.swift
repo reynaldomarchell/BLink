@@ -22,10 +22,21 @@ struct ScanResultView: View {
         // Normalize the input plate number for comparison
         let normalizedPlate = normalizePlateForComparison(plateNumber)
         
+        // Debug print
+        print("Looking for plate: \(plateNumber)")
+        print("Normalized input plate: \(normalizedPlate)")
+        print("Available bus infos: \(busInfos.map { "\($0.plateNumber) -> \(normalizePlateForComparison($0.plateNumber))" }.joined(separator: ", "))")
+        
         // Try to find a match using normalized comparison
         return busInfos.first { busInfo in
             let normalizedBusPlate = normalizePlateForComparison(busInfo.plateNumber)
-            return normalizedPlate == normalizedBusPlate
+            let matches = normalizedPlate == normalizedBusPlate
+            
+            if matches {
+                print("✅ Matched: \(plateNumber) with \(busInfo.plateNumber)")
+            }
+            
+            return matches
         }
     }
     
@@ -79,7 +90,7 @@ struct ScanResultView: View {
             }
             
             // Bus plate number
-            Text("Bus Plate: \(plateNumber)")
+            Text("Bus Plate: \(formatPlateForDisplay(plateNumber))")
                 .font(.headline)
                 .padding(.bottom, 10)
             
@@ -297,10 +308,11 @@ struct ScanResultView: View {
     
     // Check if the plate is in the predefined list in DataSeeder
     private func isPredefinedPlate(_ plate: String) -> Bool {
-        // List of predefined plates from DataSeeder
+        // List of predefined plates from DataSeeder - update to match the no-space format
         let predefinedPlates = [
-            "B 7566 PAA", "B 7366 JE", "B 7366 PAA",
-            "B 7666 PAA", "B 7966 PAA", "B 7002 PGX"
+            "B7566PAA", "B7266JF", "B7466PAA", "B7366JE",
+            "B7366PAA", "B7866PAA", "B7666PAA", "B7966PAA",
+            "B7002PGX", "B7166PAA", "B7766PAA" // Removed duplicate B7866PAA
         ]
         
         // Normalize the input plate and all predefined plates for comparison
@@ -327,14 +339,20 @@ struct ScanResultView: View {
 
     // Add a bus info entry for a predefined plate
     private func addPredefinedBusInfo() {
-        // Map of predefined plates to their route info
+        // Map of predefined plates to their route info - update to match the no-space format
         let plateToRouteMap: [String: (code: String, name: String)] = [
             "B7566PAA": ("GS", "Greenwich - Sektor 1.3 Loop Line"),
+            "B7266JF": ("GS", "Greenwich - Sektor 1.3 Loop Line"),
+            "B7466PAA": ("GS", "Greenwich - Sektor 1.3 Loop Line"),
             "B7366JE": ("ID1", "Intermoda - De Park 1"),
             "B7366PAA": ("ID2", "Intermoda - De Park 2"),
+            "B7866PAA": ("ID2", "Intermoda - De Park 2"), // This key was duplicated
             "B7666PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
             "B7966PAA": ("IS", "Intermoda - Halte Sektor 1.3"),
-            "B7002PGX": ("EC", "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line")
+            "B7002PGX": ("EC", "Electric Line | Intermoda - ICE - QBIG - Ara Rasa - The Breeze - Digital Hub - AEON Mall Loop Line"),
+            "B7166PAA": ("BC", "The Breeze - AEON - ICE - The Breeze Loop Line"),
+            // Removed duplicate key B7866PAA
+            "B7766PAA": ("IV", "Intermoda - Vanya")
         ]
         
         // Normalize the input plate for comparison
@@ -342,12 +360,12 @@ struct ScanResultView: View {
         
         // Find the matching route info using normalized comparison
         let matchingKey = plateToRouteMap.keys.first { normalizedKey in
-            normalizedInput == normalizedKey
+            normalizedInput == normalizePlateForComparison(normalizedKey)
         }
         
         if let matchingKey = matchingKey, let routeInfo = plateToRouteMap[matchingKey] {
-            // Format the plate number in a standard way (B 1234 XYZ)
-            let formattedPlate = formatPlateNumber(plateNumber) ?? plateNumber.uppercased()
+            // Use the original format from the database for consistency
+            let formattedPlate = matchingKey
             
             // Create and insert the bus info
             let busInfo = BusInfo(
@@ -441,6 +459,17 @@ struct ScanResultView: View {
         case "black": return .black
         default: return .gray
         }
+    }
+
+    // Add a new function to format plate numbers for display
+    private func formatPlateForDisplay(_ plate: String) -> String {
+        // If the plate already has spaces, return it as is
+        if plate.contains(" ") {
+            return plate
+        }
+        
+        // Otherwise, format it with spaces
+        return formatPlateNumber(plate) ?? plate
     }
 }
 
