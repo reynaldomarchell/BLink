@@ -168,10 +168,10 @@ struct HomeView: View {
                         }) {
                             Text("Enter Bus Plate Manually")
                                 .font(.system(size: 18))
-                                .foregroundColor(Color("BlueColor"))
+                                .foregroundColor(Color("BlueColorTheme"))
                                 .underline()
                                 //.frame(width: 330, height: 43)
-                                //.background(Color("BlueColor"))
+                                //.background(Color("BlueColorTheme"))
                                 //.cornerRadius(7)
                         }
                     

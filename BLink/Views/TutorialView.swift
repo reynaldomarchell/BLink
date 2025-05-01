@@ -33,7 +33,7 @@ struct TutorialContent: View {
                .fixedSize(horizontal: false, vertical: true)
            Text("BLink Bus Scanner")
                .font(.largeTitle)
-               .foregroundColor(Color("BlueColor"))
+               .foregroundColor(Color("BlueColorTheme"))
                .padding(.bottom, 18)
                .fontWeight(.semibold)
                .fixedSize(horizontal: false, vertical: true)
@@ -132,7 +132,7 @@ struct TutorialContent: View {
                    .padding()
                    .frame(width: 120, height: 45)
                    .foregroundColor(.white)
-                   .background(Color("BlueColor"))
+                   .background(Color("BlueColorTheme"))
                    .cornerRadius(10)
            }
            Spacer()

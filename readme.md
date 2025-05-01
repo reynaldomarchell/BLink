@@ -110,19 +110,20 @@ The app requires camera permissions to scan bus plate numbers. Make sure to gran
 ```plaintext
 BLink/
 ├── Models/
-│   ├── BusInfo.swift         # Bus information model
-│   ├── BusRoute.swift        # Route information model
-│   └── SavedLocation.swift   # User saved locations
+│   ├── BusInfo.swift               # Bus information model
+│   └── BusRoute.swift              # Route information model
 ├── Views/
-│   ├── HomeView.swift        # Main camera view
-│   ├── ScanResultView.swift  # Scan results display
-│   ├── RouteFinderView.swift # Route search functionality
-│   ├── RouteResultView.swift # Route details display
-│   └── RouteHistoryView.swift # History of scanned buses
+│   ├── HomeView.swift              # Main camera view
+│   ├── ManualPlateInputView.swift  # Select plate display
+│   ├── ScanResultView.swift        # Scan results display
+│   ├── RouteFinderView.swift       # Route search functionality
+│   ├── RouteResultView.swift       # Route details display
+│   ├── RouteHistoryView.swift      # History of scanned buses
+│   └── TutorialView.swift          # Tutorial display
 ├── Utils/
-│   ├── DataSeeder.swift      # Initial data population
-│   └── CoreLocation.swift    # Location services
-└── BLinkApp.swift            # App entry point
+│   ├── DataSeeder.swift            # Initial data population
+│   └── CoreLocation.swift          # Location services
+└── BLinkApp.swift                  # App entry point
 ```
 
 ---

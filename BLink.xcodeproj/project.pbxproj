@@ -6,63 +6,20 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		D26ACE712D917C36000E2663 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D26ACE562D917C35000E2663 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D26ACE5D2D917C35000E2663;
-			remoteInfo = BLink;
-		};
-		D26ACE7B2D917C36000E2663 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D26ACE562D917C35000E2663 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D26ACE5D2D917C35000E2663;
-			remoteInfo = BLink;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		D26ACE5E2D917C35000E2663 /* BLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D26ACE702D917C36000E2663 /* BLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D26ACE7A2D917C36000E2663 /* BLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2E40E6D2DC32106002EE8AB /* BLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D26ACE602D917C35000E2663 /* BLink */ = {
+		D2E40E6F2DC32106002EE8AB /* BLink */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BLink;
-			sourceTree = "<group>";
-		};
-		D26ACE732D917C36000E2663 /* BLinkTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BLinkTests;
-			sourceTree = "<group>";
-		};
-		D26ACE7D2D917C36000E2663 /* BLinkUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BLinkUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D26ACE5B2D917C35000E2663 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D26ACE6D2D917C36000E2663 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D26ACE772D917C36000E2663 /* Frameworks */ = {
+		D2E40E6A2DC32106002EE8AB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,22 +29,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D26ACE552D917C35000E2663 = {
+		D2E40E642DC32106002EE8AB = {
 			isa = PBXGroup;
 			children = (
-				D26ACE602D917C35000E2663 /* BLink */,
-				D26ACE732D917C36000E2663 /* BLinkTests */,
-				D26ACE7D2D917C36000E2663 /* BLinkUITests */,
-				D26ACE5F2D917C35000E2663 /* Products */,
+				D2E40E6F2DC32106002EE8AB /* BLink */,
+				D2E40E6E2DC32106002EE8AB /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D26ACE5F2D917C35000E2663 /* Products */ = {
+		D2E40E6E2DC32106002EE8AB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D26ACE5E2D917C35000E2663 /* BLink.app */,
-				D26ACE702D917C36000E2663 /* BLinkTests.xctest */,
-				D26ACE7A2D917C36000E2663 /* BLinkUITests.xctest */,
+				D2E40E6D2DC32106002EE8AB /* BLink.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,134 +48,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D26ACE5D2D917C35000E2663 /* BLink */ = {
+		D2E40E6C2DC32106002EE8AB /* BLink */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D26ACE842D917C36000E2663 /* Build configuration list for PBXNativeTarget "BLink" */;
+			buildConfigurationList = D2E40E782DC32107002EE8AB /* Build configuration list for PBXNativeTarget "BLink" */;
 			buildPhases = (
-				D26ACE5A2D917C35000E2663 /* Sources */,
-				D26ACE5B2D917C35000E2663 /* Frameworks */,
-				D26ACE5C2D917C35000E2663 /* Resources */,
+				D2E40E692DC32106002EE8AB /* Sources */,
+				D2E40E6A2DC32106002EE8AB /* Frameworks */,
+				D2E40E6B2DC32106002EE8AB /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D26ACE602D917C35000E2663 /* BLink */,
+				D2E40E6F2DC32106002EE8AB /* BLink */,
 			);
 			name = BLink;
 			packageProductDependencies = (
 			);
 			productName = BLink;
-			productReference = D26ACE5E2D917C35000E2663 /* BLink.app */;
+			productReference = D2E40E6D2DC32106002EE8AB /* BLink.app */;
 			productType = "com.apple.product-type.application";
-		};
-		D26ACE6F2D917C36000E2663 /* BLinkTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D26ACE872D917C36000E2663 /* Build configuration list for PBXNativeTarget "BLinkTests" */;
-			buildPhases = (
-				D26ACE6C2D917C36000E2663 /* Sources */,
-				D26ACE6D2D917C36000E2663 /* Frameworks */,
-				D26ACE6E2D917C36000E2663 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D26ACE722D917C36000E2663 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D26ACE732D917C36000E2663 /* BLinkTests */,
-			);
-			name = BLinkTests;
-			packageProductDependencies = (
-			);
-			productName = BLinkTests;
-			productReference = D26ACE702D917C36000E2663 /* BLinkTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		D26ACE792D917C36000E2663 /* BLinkUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D26ACE8A2D917C36000E2663 /* Build configuration list for PBXNativeTarget "BLinkUITests" */;
-			buildPhases = (
-				D26ACE762D917C36000E2663 /* Sources */,
-				D26ACE772D917C36000E2663 /* Frameworks */,
-				D26ACE782D917C36000E2663 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D26ACE7C2D917C36000E2663 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D26ACE7D2D917C36000E2663 /* BLinkUITests */,
-			);
-			name = BLinkUITests;
-			packageProductDependencies = (
-			);
-			productName = BLinkUITests;
-			productReference = D26ACE7A2D917C36000E2663 /* BLinkUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D26ACE562D917C35000E2663 /* Project object */ = {
+		D2E40E652DC32106002EE8AB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
-					D26ACE5D2D917C35000E2663 = {
-						CreatedOnToolsVersion = 16.2;
-					};
-					D26ACE6F2D917C36000E2663 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D26ACE5D2D917C35000E2663;
-					};
-					D26ACE792D917C36000E2663 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D26ACE5D2D917C35000E2663;
+					D2E40E6C2DC32106002EE8AB = {
+						CreatedOnToolsVersion = 16.3;
 					};
 				};
 			};
-			buildConfigurationList = D26ACE592D917C35000E2663 /* Build configuration list for PBXProject "BLink" */;
+			buildConfigurationList = D2E40E682DC32106002EE8AB /* Build configuration list for PBXProject "BLink" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = D26ACE552D917C35000E2663;
+			mainGroup = D2E40E642DC32106002EE8AB;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = D26ACE5F2D917C35000E2663 /* Products */;
+			productRefGroup = D2E40E6E2DC32106002EE8AB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D26ACE5D2D917C35000E2663 /* BLink */,
-				D26ACE6F2D917C36000E2663 /* BLinkTests */,
-				D26ACE792D917C36000E2663 /* BLinkUITests */,
+				D2E40E6C2DC32106002EE8AB /* BLink */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D26ACE5C2D917C35000E2663 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D26ACE6E2D917C36000E2663 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D26ACE782D917C36000E2663 /* Resources */ = {
+		D2E40E6B2DC32106002EE8AB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,21 +115,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D26ACE5A2D917C35000E2663 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D26ACE6C2D917C36000E2663 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D26ACE762D917C36000E2663 /* Sources */ = {
+		D2E40E692DC32106002EE8AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -255,21 +124,8 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		D26ACE722D917C36000E2663 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D26ACE5D2D917C35000E2663 /* BLink */;
-			targetProxy = D26ACE712D917C36000E2663 /* PBXContainerItemProxy */;
-		};
-		D26ACE7C2D917C36000E2663 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D26ACE5D2D917C35000E2663 /* BLink */;
-			targetProxy = D26ACE7B2D917C36000E2663 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		D26ACE822D917C36000E2663 /* Debug */ = {
+		D2E40E762DC32107002EE8AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -304,6 +160,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 74859D4FR4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -321,7 +178,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -332,7 +189,7 @@
 			};
 			name = Debug;
 		};
-		D26ACE832D917C36000E2663 /* Release */ = {
+		D2E40E772DC32107002EE8AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -367,6 +224,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 74859D4FR4;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -378,7 +236,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -388,18 +246,19 @@
 			};
 			name = Release;
 		};
-		D26ACE852D917C36000E2663 /* Debug */ = {
+		D2E40E792DC32107002EE8AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BLink\"";
 				DEVELOPMENT_TEAM = 74859D4FR4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "\"BLink needs camera access to scan bus plate numbers\"";
+				INFOPLIST_KEY_CFBundleDisplayName = BLink;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSCameraUsageDescription = "B-Link needs camera access to scan bus plate numbers";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -410,7 +269,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.naspadstudio.blink;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.BLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -418,18 +277,19 @@
 			};
 			name = Debug;
 		};
-		D26ACE862D917C36000E2663 /* Release */ = {
+		D2E40E7A2DC32107002EE8AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"BLink\"";
 				DEVELOPMENT_TEAM = 74859D4FR4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "\"BLink needs camera access to scan bus plate numbers\"";
+				INFOPLIST_KEY_CFBundleDisplayName = BLink;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_NSCameraUsageDescription = "B-Link needs camera access to scan bus plate numbers";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -440,126 +300,36 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.naspadstudio.blink;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ada.BLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		D26ACE882D917C36000E2663 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74859D4FR4;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.reynaldo.BLinkTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BLink.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BLink";
-			};
-			name = Debug;
-		};
-		D26ACE892D917C36000E2663 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74859D4FR4;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.reynaldo.BLinkTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BLink.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BLink";
-			};
-			name = Release;
-		};
-		D26ACE8B2D917C36000E2663 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74859D4FR4;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.reynaldo.blink;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BLink;
-			};
-			name = Debug;
-		};
-		D26ACE8C2D917C36000E2663 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 74859D4FR4;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.reynaldo.blink;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BLink;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D26ACE592D917C35000E2663 /* Build configuration list for PBXProject "BLink" */ = {
+		D2E40E682DC32106002EE8AB /* Build configuration list for PBXProject "BLink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D26ACE822D917C36000E2663 /* Debug */,
-				D26ACE832D917C36000E2663 /* Release */,
+				D2E40E762DC32107002EE8AB /* Debug */,
+				D2E40E772DC32107002EE8AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D26ACE842D917C36000E2663 /* Build configuration list for PBXNativeTarget "BLink" */ = {
+		D2E40E782DC32107002EE8AB /* Build configuration list for PBXNativeTarget "BLink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D26ACE852D917C36000E2663 /* Debug */,
-				D26ACE862D917C36000E2663 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D26ACE872D917C36000E2663 /* Build configuration list for PBXNativeTarget "BLinkTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D26ACE882D917C36000E2663 /* Debug */,
-				D26ACE892D917C36000E2663 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D26ACE8A2D917C36000E2663 /* Build configuration list for PBXNativeTarget "BLinkUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D26ACE8B2D917C36000E2663 /* Debug */,
-				D26ACE8C2D917C36000E2663 /* Release */,
+				D2E40E792DC32107002EE8AB /* Debug */,
+				D2E40E7A2DC32107002EE8AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D26ACE562D917C35000E2663 /* Project object */;
+	rootObject = D2E40E652DC32106002EE8AB /* Project object */;
 }
